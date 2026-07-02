@@ -1,0 +1,24 @@
+bn:
+  devise:
+    sessions:
+      signed_in: "সফলভাবে সাইন ইন করা হয়েছে।"
+      signed_out: "সফলভাবে সাইন আউট করা হয়েছে।"
+      already_signed_out: "সফলভাবে সাইন আউট করা হয়েছে।"
+    passwords:
+      updated: "আপনার পাসওয়ার্ড সফলভাবে পরিবর্তন করা হয়েছে।"
+    registrations:
+      signed_up: "স্বাগতম! আপনি সফলভাবে নিবন্ধন করেছেন।"
+      updated: "আপনার অ্যাকাউন্ট সফলভাবে আপডেট করা হয়েছে।"
+      destroyed: "আপনার অ্যাকাউন্ট বাতিল করা হয়েছে।"
+    failure:
+      unauthenticated: "চালিয়ে যাওয়ার জন্য আপনাকে সাইন ইন বা সাইন আপ করতে হবে।"
+      invalid: "ভুল %{authentication_keys} বা পাসওয়ার্ড।"
+      not_found_in_database: "ভুল %{authentication_keys} বা পাসওয়ার্ড।"
+      locked: "আপনার অ্যাকাউন্ট লক করা আছে।"
+      last_attempt: "আপনার অ্যাকাউন্ট লক হওয়ার আগে আপনার আরও একটি চেষ্টা বাকি আছে।"
+      inactive: "আপনার অ্যাকাউন্ট এখনও সক্রিয় নয়।"
+  errors:
+    messages:
+      not_saved:
+        one: "1টি ত্রুটির কারণে এই %{resource} সংরক্ষণ করা যায়নি:"
+        other: "%{count}টি ত্রুটির কারণে এই %{resource} সংরক্ষণ করা যায়নি:"

@@ -1,0 +1,174 @@
+bn:
+  app:
+    name: "টিএসএম সিস্টেম"
+    subtitle: "পরিবহন ব্যবস্থাপনা"
+    loading: "লোড হচ্ছে..."
+
+  nav:
+    dashboard: "ড্যাশবোর্ড"
+    shipments: "চালান"
+    trucks: "ট্রাক"
+    drivers: "চালক"
+    products: "পণ্য"
+    locations: "লোকেশন"
+    routes: "রুট"
+    reports: "রিপোর্ট"
+    notifications: "নোটিফিকেশন"
+    audit_log: "অডিট লগ"
+    settings: "সেটিংস"
+
+  reports:
+    daily: "দৈনিক রিপোর্ট"
+    weekly: "সাপ্তাহিক রিপোর্ট"
+    monthly: "মাসিক রিপোর্ট"
+    truck_wise: "ট্রাকভিত্তিক রিপোর্ট"
+    driver_wise: "চালকভিত্তিক রিপোর্ট"
+    product_wise: "পণ্যভিত্তিক রিপোর্ট"
+    generate: "জেনারেট"
+    csv: "সিএসভি"
+    no_data: "কোনো তথ্য নেই"
+    all_trucks: "সব ট্রাক"
+    all_drivers: "সব চালক"
+    all_products: "সব পণ্য"
+    exports: "রপ্তানি"
+    imports: "আমদানি"
+    completed: "সম্পন্ন"
+    on_the_way: "পথে"
+
+  models:
+    shipment:
+      one: "চালান"
+      other: "চালান"
+    truck:
+      one: "ট্রাক"
+      other: "ট্রাক"
+    driver:
+      one: "চালক"
+      other: "চালক"
+    product:
+      one: "পণ্য"
+      other: "পণ্য"
+    location:
+      one: "লোকেশন"
+      other: "লোকেশন"
+    route:
+      one: "রুট"
+      other: "রুট"
+    product_category:
+      one: "পণ্যের ক্যাটাগরি"
+      other: "পণ্যের ক্যাটাগরি"
+    notification:
+      one: "নোটিফিকেশন"
+      other: "নোটিফিকেশন"
+    setting:
+      one: "সেটিং"
+      other: "সেটিংস"
+
+  actions:
+    new: "নতুন %{model}"
+    edit: "সম্পাদনা"
+    show: "বিস্তারিত"
+    delete: "মুছুন"
+    save: "সংরক্ষণ"
+    cancel: "বাতিল"
+    back: "পেছনে"
+    search: "অনুসন্ধান"
+    clear_filters: "ফিল্টার মুছুন"
+    mark_read: "পঠিত হিসেবে চিহ্নিত করুন"
+    mark_all_read: "সব পঠিত হিসেবে চিহ্নিত করুন"
+    generate: "জেনারেট"
+
+  flash:
+    created: "%{model} সফলভাবে তৈরি করা হয়েছে।"
+    updated: "%{model} সফলভাবে আপডেট করা হয়েছে।"
+    destroyed: "%{model} সফলভাবে মুছে ফেলা হয়েছে।"
+    not_authorized: "এই কাজটি করার অনুমতি আপনার নেই।"
+
+  confirm:
+    delete: "আপনি কি নিশ্চিত? এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।"
+
+  empty_state:
+    no_shipments: "কোনো চালান নেই"
+    no_trucks: "কোনো ট্রাক নেই"
+    no_drivers: "কোনো চালক নেই"
+    no_products: "কোনো পণ্য নেই"
+    no_locations: "কোনো লোকেশন নেই"
+    no_routes: "কোনো রুট নেই"
+    no_categories: "কোনো ক্যাটাগরি নেই"
+    no_assignments: "কোনো নিয়োগ নেই"
+    no_notifications: "কোনো নোটিফিকেশন নেই"
+    no_audit_logs: "কোনো অডিট লগ নেই"
+
+  settings:
+    general: "সাধারণ"
+    notification: "নোটিফিকেশন"
+    system: "সিস্টেম"
+
+  auth:
+    sign_in: "সাইন ইন"
+    sign_up: "সাইন আপ"
+    sign_out: "সাইন আউট"
+    settings: "সেটিংস"
+    profile: "প্রোফাইল"
+    forgot_password: "পাসওয়ার্ড ভুলে গেছেন?"
+    remember_me: "আমাকে মনে রাখুন"
+
+  locale:
+    en: "English"
+    bn: "বাংলা"
+
+  date:
+    formats:
+      default: "%d %b %Y"
+      short: "%d %b"
+      long: "%d %B %Y"
+    month_names:
+      - জানুয়ারি
+      - ফেব্রুয়ারি
+      - মার্চ
+      - এপ্রিল
+      - মে
+      - জুন
+      - জুলাই
+      - আগস্ট
+      - সেপ্টেম্বর
+      - অক্টোবর
+      - নভেম্বর
+      - ডিসেম্বর
+    abbr_month_names:
+      - জানু
+      - ফেব্রু
+      - মার্চ
+      - এপ্রি
+      - মে
+      - জুন
+      - জুলা
+      - আগ
+      - সেপ্ট
+      - অক্টো
+      - নভে
+      - ডিসে
+    day_names:
+      - রবিবার
+      - সোমবার
+      - মঙ্গলবার
+      - বুধবার
+      - বৃহস্পতিবার
+      - শুক্রবার
+      - শনিবার
+    abbr_day_names:
+      - রবি
+      - সোম
+      - মঙ্গল
+      - বুধ
+      - বৃহঃ
+      - শুক্র
+      - শনি
+
+  time:
+    ago: "%{time} আগে"
+    just_now: "এইমাত্র"
+    formats:
+      default: "%d %b %Y at %I:%M %p"
+      short: "%d %b, %I:%M %p"
+      long: "%d %B %Y at %I:%M %p"

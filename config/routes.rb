@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  scope "(:locale)", locale: /en|bn/ do
   devise_for :users
 
   get "up" => "rails/health#show", as: :rails_health_check
@@ -50,5 +51,6 @@ Rails.application.routes.draw do
     end
 
     resources :audit_logs, only: [:index]
+  end
   end
 end

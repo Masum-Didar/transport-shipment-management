@@ -1,10 +1,131 @@
 en:
+  app:
+    name: "TSM System"
+    subtitle: "Transport Management"
+    loading: "Loading..."
+
+  nav:
+    dashboard: "Dashboard"
+    shipments: "Shipments"
+    trucks: "Trucks"
+    drivers: "Drivers"
+    products: "Products"
+    locations: "Locations"
+    routes: "Routes"
+    reports: "Reports"
+    notifications: "Notifications"
+    audit_log: "Audit Log"
+    settings: "Settings"
+
+  reports:
+    daily: "Daily Report"
+    weekly: "Weekly Report"
+    monthly: "Monthly Report"
+    truck_wise: "Truck Wise Report"
+    driver_wise: "Driver Wise Report"
+    product_wise: "Product Wise Report"
+    generate: "Generate"
+    csv: "CSV"
+    no_data: "No data"
+    all_trucks: "All Trucks"
+    all_drivers: "All Drivers"
+    all_products: "All Products"
+    exports: "Exports"
+    imports: "Imports"
+    completed: "Completed"
+    on_the_way: "On The Way"
+
+  models:
+    shipment:
+      one: "Shipment"
+      other: "Shipments"
+    truck:
+      one: "Truck"
+      other: "Trucks"
+    driver:
+      one: "Driver"
+      other: "Drivers"
+    product:
+      one: "Product"
+      other: "Products"
+    location:
+      one: "Location"
+      other: "Locations"
+    route:
+      one: "Route"
+      other: "Routes"
+    product_category:
+      one: "Category"
+      other: "Categories"
+    notification:
+      one: "Notification"
+      other: "Notifications"
+    setting:
+      one: "Setting"
+      other: "Settings"
+
+  actions:
+    new: "New %{model}"
+    edit: "Edit"
+    show: "Details"
+    delete: "Delete"
+    save: "Save"
+    cancel: "Cancel"
+    back: "Back"
+    search: "Search"
+    clear_filters: "Clear Filters"
+    mark_read: "Mark Read"
+    mark_all_read: "Mark All Read"
+    generate: "Generate"
+
+  flash:
+    created: "%{model} was successfully created."
+    updated: "%{model} was successfully updated."
+    destroyed: "%{model} was successfully destroyed."
+    not_authorized: "You are not authorized to perform this action."
+
+  confirm:
+    delete: "Are you sure? This action cannot be undone."
+
+  empty_state:
+    no_shipments: "No shipments"
+    no_trucks: "No trucks"
+    no_drivers: "No drivers"
+    no_products: "No products"
+    no_locations: "No locations"
+    no_routes: "No routes"
+    no_categories: "No categories"
+    no_assignments: "No assignments"
+    no_notifications: "No notifications"
+    no_audit_logs: "No audit logs"
+
+  settings:
+    general: "General"
+    notification: "Notification"
+    system: "System"
+
+  auth:
+    sign_in: "Sign In"
+    sign_up: "Sign Up"
+    sign_out: "Sign Out"
+    settings: "Settings"
+    profile: "Profile"
+    forgot_password: "Forgot password?"
+    remember_me: "Remember me"
+
+  locale:
+    en: "English"
+    bn: "বাংলা"
+
   date:
     formats:
       default: "%d %b %Y"
       short: "%d %b"
       long: "%d %B %Y"
+
   time:
+    ago: "%{time} ago"
+    just_now: "Just now"
     formats:
       default: "%d %b %Y at %I:%M %p"
       short: "%d %b, %I:%M %p"
