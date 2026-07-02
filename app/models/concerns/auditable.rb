@@ -2,7 +2,7 @@ module Auditable
   extend ActiveSupport::Concern
 
   included do
-    has_many :audit_logs, as: :auditable, dependent: :nullify
+    has_many :audit_logs, as: :auditable
     after_create :log_create
     after_update :log_update
     after_discard :log_discard if respond_to?(:discard)
@@ -24,6 +24,8 @@ module Auditable
   end
 
   def create_audit_log(action, changes = nil)
+    return unless Current.user
+
     audit_logs.create!(
       user: Current.user,
       action: action,

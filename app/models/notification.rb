@@ -1,4 +1,6 @@
 class Notification < ApplicationRecord
+  self.inheritance_column = nil
+
   belongs_to :user
   belongs_to :notifiable, polymorphic: true, optional: true
 
