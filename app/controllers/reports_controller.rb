@@ -1,4 +1,5 @@
 class ReportsController < AuthenticatedController
+  skip_after_action :verify_authorized
   skip_after_action :verify_policy_scoped
   before_action :authorize_report
 
