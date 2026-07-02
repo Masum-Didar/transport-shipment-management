@@ -1,0 +1,21 @@
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow duration-200">
+  <div class="flex items-start justify-between">
+    <div>
+      <p class="text-xs text-gray-500 font-medium uppercase tracking-wide"><%= @label %></p>
+      <p class="text-3xl font-bold mt-1 <%= @color %>"><%= @value %></p>
+    </div>
+    <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl <%= icon_bg %>">
+      <%= @icon %>
+    </div>
+  </div>
+  <% if @trend %>
+    <div class="mt-3 flex items-center gap-1 text-xs font-medium <%= trend_color %>">
+      <% if @trend_up %>
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+      <% else %>
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M17 7 7 17"/></svg>
+      <% end %>
+      <%= @trend %>
+    </div>
+  <% end %>
+</div>

@@ -1,32 +1,75 @@
-<aside class="fixed left-0 top-0 h-full w-64 bg-gray-900 text-white flex flex-col z-40">
-  <div class="p-4 border-b border-gray-700">
-    <h1 class="text-lg font-bold">📦 TSM System</h1>
+<aside data-sidebar-target="desktopSidebar" class="hidden lg:flex flex-col w-64 bg-slate-800 border-r border-slate-700 fixed inset-y-0 left-0 z-30 transition-all duration-200">
+  <div class="flex items-center gap-3 px-5 h-16 border-b border-slate-700 shrink-0">
+    <div class="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center flex-shrink-0">
+      <span class="text-white text-base font-bold">📦</span>
+    </div>
+    <div class="sidebar-label">
+      <div class="text-white font-semibold text-sm leading-tight">TSM System</div>
+      <div class="text-slate-400 text-xs">Transport Management</div>
+    </div>
   </div>
 
-  <nav class="flex-1 overflow-y-auto p-3 space-y-1">
-    <%= nav_link "Dashboard",    root_path,        "🏠" %>
-    <%= nav_link "Trucks",       trucks_path,           "🚛" %>
-    <%= nav_link "Drivers",      drivers_path,          "👨‍✈️" %>
-    <%= nav_link "Products",     products_path,         "📦" %>
-    <%= nav_link "Shipments",    shipments_path,        "📋" %>
-    <%= nav_link "Locations",    locations_path,        "📍" %>
-    <%= nav_link "Routes",       routes_path,           "🗺️" %>
+  <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+    <div class="tooltip-wrapper">
+      <%= nav_link "Dashboard", root_path, "dashboard" %>
+    </div>
+    <div class="tooltip-wrapper">
+      <%= nav_link "Shipments", shipments_path, "clipboard_list" %>
+    </div>
+    <div class="tooltip-wrapper">
+      <%= nav_link "Trucks", trucks_path, "truck" %>
+    </div>
+    <div class="tooltip-wrapper">
+      <%= nav_link "Drivers", drivers_path, "users" %>
+    </div>
+    <div class="tooltip-wrapper">
+      <%= nav_link "Products", products_path, "package" %>
+    </div>
+    <div class="tooltip-wrapper">
+      <%= nav_link "Locations", locations_path, "map_pin" %>
+    </div>
+    <div class="tooltip-wrapper">
+      <%= nav_link "Routes", routes_path, "map" %>
+    </div>
 
-    <div class="border-t border-gray-700 my-3"></div>
+    <div class="pt-3 pb-1 px-1">
+      <div class="h-px bg-slate-700"></div>
+    </div>
 
-    <%= nav_link "Reports",      reports_daily_path,    "📊" %>
-    <%= nav_link "Notifications", notifications_path,  "🔔" %>
+    <div class="tooltip-wrapper">
+      <%= nav_link "Reports", reports_daily_path, "bar_chart" %>
+    </div>
+    <div class="tooltip-wrapper">
+      <%= nav_link "Notifications", notifications_path, "bell" %>
+    </div>
 
-    <div class="border-t border-gray-700 my-3"></div>
+    <div class="pt-3 pb-1 px-1 sidebar-label">
+      <div class="h-px bg-slate-700"></div>
+      <p class="text-xs text-slate-500 font-medium px-2 pt-2 pb-1 uppercase tracking-wider">Admin</p>
+    </div>
 
-    <%= nav_link "Audit Log",    audit_logs_path,       "📝" if current_user.admin? %>
-    <%= nav_link "Settings",     settings_path,         "⚙️" if current_user.role.name.in?(%w[super_admin admin]) %>
+    <% if current_user.admin? %>
+      <div class="tooltip-wrapper">
+        <%= nav_link "Audit Log", audit_logs_path, "file_text" %>
+      </div>
+    <% end %>
+    <div class="tooltip-wrapper">
+      <%= nav_link "Settings", settings_path, "settings" if current_user.admin? %>
+    </div>
   </nav>
 
-  <div class="p-4 border-t border-gray-700">
-    <div class="text-sm text-gray-400"><%= current_user.name %></div>
-    <div class="text-xs text-gray-500"><%= current_user.role.name.titleize %></div>
-    <%= link_to "Sign Out", destroy_user_session_path, data: { turbo_method: :delete },
-                class: "text-xs text-red-400 hover:text-red-300 mt-1 block" %>
+  <div class="px-3 py-4 border-t border-slate-700">
+    <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-slate-700/50">
+      <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-semibold shrink-0">
+        <%= current_user.name.split.map { |n| n[0] }.join[0..1].upcase %>
+      </div>
+      <div class="sidebar-label flex-1 min-w-0">
+        <div class="text-white text-sm font-medium truncate"><%= current_user.name %></div>
+        <div class="text-slate-400 text-xs"><%= current_user.role.name.titleize %></div>
+      </div>
+      <%= link_to destroy_user_session_path, data: { turbo_method: :delete }, class: "text-slate-400 hover:text-white transition-colors shrink-0" do %>
+        <%= log_out_icon %>
+      <% end %>
+    </div>
   </div>
 </aside>

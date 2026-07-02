@@ -1,0 +1,13 @@
+<div class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" data-controller="modal" data-action="click->modal#closeBackground keydown->modal#closeOnEscape">
+  <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6" data-action="click->modal#stopPropagation">
+    <div class="text-center mb-5">
+      <div class="text-4xl mb-3"><%= @icon %></div>
+      <h3 class="text-lg font-semibold text-gray-900"><%= @title %></h3>
+      <p class="text-sm text-gray-500 mt-1"><%= @message %></p>
+    </div>
+    <div class="flex gap-3 justify-center">
+      <%= link_to "Cancel", "#", class: "flex-1 bg-white border border-gray-300 text-gray-700 px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors text-center", data: { action: "click->modal#close" } %>
+      <%= link_to @confirm_text, @confirm_path, method: @confirm_method, class: "flex-1 bg-red-600 text-white px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-red-700 transition-colors text-center" %>
+    </div>
+  </div>
+</div>

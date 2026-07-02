@@ -1,13 +1,73 @@
-<header class="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between">
-  <h2 class="text-xl font-semibold text-gray-800"><%= content_for(:page_title) || controller_name.titleize %></h2>
+<header class="sticky top-0 bg-white border-b border-gray-200 z-20 h-14">
+  <div class="flex items-center justify-between h-full px-4 lg:px-6">
+    <div class="flex items-center gap-3 min-w-0">
+      <button
+        data-action="click->sidebar#toggleMobile"
+        class="lg:hidden p-1.5 rounded-md text-gray-500 hover:bg-gray-100 transition-colors"
+      >
+        <%= menu_icon %>
+      </button>
 
-  <div class="flex items-center space-x-4">
-    <%= link_to notifications_path, class: "relative" do %>
-      <span class="text-lg">🔔</span>
-      <% unread = current_user.notifications.unread.count %>
-      <% if unread > 0 %>
-        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center"><%= unread %></span>
+      <button
+        data-action="click->sidebar#toggleDesktop"
+        class="hidden lg:flex p-1.5 rounded-md text-gray-500 hover:bg-gray-100 transition-colors"
+      >
+        <%= menu_icon %>
+      </button>
+
+      <nav class="flex items-center gap-1 text-sm min-w-0 overflow-x-auto">
+        <%= link_to root_path, class: "text-gray-500 hover:text-blue-600 transition-colors shrink-0" do %>
+          <%= home_icon %>
+        <% end %>
+        <% breadcrumb = content_for(:breadcrumb) %>
+        <% if breadcrumb.present? %>
+          <span class="flex items-center gap-1 shrink-0">
+            <%= chevron_right_icon %>
+            <span class="text-gray-500 whitespace-nowrap"><%= breadcrumb %></span>
+          </span>
+        <% end %>
+        <span class="flex items-center gap-1 shrink-0">
+          <%= chevron_right_icon %>
+          <span class="text-gray-900 font-medium whitespace-nowrap"><%= content_for(:page_title) || controller_name.titleize %></span>
+        </span>
+      </nav>
+    </div>
+
+    <div class="flex items-center gap-2 shrink-0">
+      <%= link_to url_for(locale: I18n.locale == :en ? :bn : :en), class: "flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium text-gray-600 hover:bg-gray-100 transition-colors border border-gray-200" do %>
+        <%= globe_icon %>
+        <%= I18n.locale == :en ? "বাংলা" : "English" %>
       <% end %>
-    <% end %>
+
+      <%= link_to notifications_path, class: "relative p-2 rounded-md text-gray-500 hover:bg-gray-100 transition-colors" do %>
+        <%= bell_icon %>
+        <% unread = current_user.notifications.unread.count %>
+        <% if unread > 0 %>
+          <span class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-semibold">
+            <%= unread %>
+          </span>
+        <% end %>
+      <% end %>
+
+      <div class="relative" data-controller="dropdown">
+        <button data-action="click->dropdown#toggle click@window->dropdown#hide" class="flex items-center gap-2 pl-2 pr-1.5 py-1.5 rounded-md hover:bg-gray-100 transition-colors">
+          <div class="w-7 h-7 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-semibold">
+            <%= current_user.name.split.map { |n| n[0] }.join[0..1].upcase %>
+          </div>
+          <span class="hidden sm:block text-sm font-medium text-gray-700"><%= current_user.name %></span>
+          <%= chevron_down_icon %>
+        </button>
+
+        <div data-dropdown-target="menu" class="hidden absolute right-0 top-full mt-1 w-44 bg-white border border-gray-200 rounded-xl shadow-lg py-1 z-50">
+          <%= link_to settings_path, class: "w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2" do %>
+            <%= settings_icon %> Settings
+          <% end %>
+          <div class="my-1 h-px bg-gray-100"></div>
+          <%= link_to destroy_user_session_path, data: { turbo_method: :delete }, class: "w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2" do %>
+            <%= log_out_icon %> Sign Out
+          <% end %>
+        </div>
+      </div>
+    </div>
   </div>
 </header>

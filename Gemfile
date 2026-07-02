@@ -53,6 +53,9 @@ gem "discard"
 gem "ransack"
 gem "pagy", "~> 9.0"
 
+# Reusable UI Components
+gem "view_component"
+
 # PDF & Excel Export
 gem "prawn"
 gem "prawn-table"
