@@ -1,4 +1,5 @@
 class Location < ApplicationRecord
+  include Auditable
   include Discard::Model
 
   has_many :routes_from, class_name: "Route", foreign_key: :from_location_id, dependent: :restrict_with_error

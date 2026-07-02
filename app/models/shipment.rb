@@ -1,4 +1,5 @@
 class Shipment < ApplicationRecord
+  include Auditable
   include Discard::Model
 
   belongs_to :source_location, class_name: "Location", optional: true

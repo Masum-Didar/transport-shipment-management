@@ -2,6 +2,7 @@ module Auditable
   extend ActiveSupport::Concern
 
   included do
+    has_many :audit_logs, as: :auditable, dependent: :nullify
     after_create :log_create
     after_update :log_update
     after_discard :log_discard if respond_to?(:discard)
@@ -26,8 +27,6 @@ module Auditable
     audit_logs.create!(
       user: Current.user,
       action: action,
-      auditable_type: self.class.name,
-      auditable_id: id,
       audited_changes: changes,
       ip_address: Current.ip_address,
       user_agent: Current.user_agent

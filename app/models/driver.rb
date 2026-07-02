@@ -1,4 +1,5 @@
 class Driver < ApplicationRecord
+  include Auditable
   include Discard::Model
 
   has_many :driver_assignments, dependent: :destroy

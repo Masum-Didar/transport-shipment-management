@@ -1,4 +1,5 @@
 class Product < ApplicationRecord
+  include Auditable
   include Discard::Model
 
   belongs_to :product_category, optional: true

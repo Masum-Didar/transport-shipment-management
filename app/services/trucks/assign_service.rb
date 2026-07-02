@@ -21,6 +21,9 @@ module Trucks
 
         @driver.update!(status: "driving")
         @truck.update!(status: "assigned")
+
+        DriverNotificationJob.perform_later(driver_assignment_id: assignment.id, event: "assigned")
+
         assignment
       end
     end
@@ -29,8 +32,11 @@ module Trucks
 
     def release_current_driver
       current = @truck.driver_assignments.current.last
-      current&.update!(released_at: Time.current)
-      current&.driver&.update!(status: "available")
+      return unless current
+
+      current.update!(released_at: Time.current)
+      current.driver.update!(status: "available")
+      DriverNotificationJob.perform_later(driver_assignment_id: current.id, event: "released")
     end
   end
 end

@@ -18,7 +18,8 @@ module Shipments
           changed_at: Time.current,
           remarks: @remarks
         )
-        create_notification if @new_status == "completed"
+        event = @new_status == "completed" ? "completed" : "status_changed"
+        ShipmentNotificationJob.perform_later(shipment_id: @shipment.id, event: event)
       end
 
       true
@@ -38,19 +39,6 @@ module Shipments
         "unloading"  => %w[completed]
       }
       transitions[@shipment.status]&.include?(@new_status)
-    end
-
-    def create_notification
-      admin_users = User.joins(:role).where(roles: { name: %w[super_admin admin] })
-      admin_users.each do |admin|
-        Notification.create!(
-          user: admin,
-          type: "shipment_completed",
-          title: "Shipment Completed",
-          message: "#{@shipment.shipment_number} has been completed.",
-          notifiable: @shipment
-        )
-      end
     end
   end
 end

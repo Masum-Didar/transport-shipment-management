@@ -1,4 +1,5 @@
 class Truck < ApplicationRecord
+  include Auditable
   include Discard::Model
 
   belongs_to :current_location, class_name: "Location", optional: true

@@ -18,7 +18,7 @@ module Shipments
           changed_by: @user,
           changed_at: Time.current
         )
-        create_notification(shipment)
+        ShipmentNotificationJob.perform_later(shipment_id: shipment.id, event: "created")
       end
 
       shipment
@@ -32,16 +32,6 @@ module Shipments
       date_part = Date.current.strftime("%Y%m%d")
       count = Shipment.where("shipment_number LIKE ?", "SH-#{date_part}-%").count + 1
       "SH-#{date_part}-#{count.to_s.rjust(4, '0')}"
-    end
-
-    def create_notification(shipment)
-      Notification.create!(
-        user: @user,
-        type: "shipment_created",
-        title: "New #{shipment.shipment_type.titleize} Shipment",
-        message: "#{shipment.shipment_number}: #{shipment.source_location&.name} → #{shipment.destination_location&.name}",
-        notifiable: shipment
-      )
     end
   end
 end

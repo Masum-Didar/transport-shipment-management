@@ -1,4 +1,5 @@
 class ProductCategory < ApplicationRecord
+  include Auditable
   include Discard::Model
 
   has_many :products, dependent: :restrict_with_error
