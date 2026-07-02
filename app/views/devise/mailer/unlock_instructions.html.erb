@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="font-family:'Inter',system-ui,sans-serif;background:#F9FAFB;padding:2rem 1rem">
+  <table align="center" style="max-width:480px;width:100%;background:#fff;border-radius:12px;border:1px solid #E5E7EB;padding:2rem">
+    <tr><td style="text-align:center;padding-bottom:1.5rem">
+      <div style="width:48px;height:48px;background:#2563EB;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;font-size:1.25rem;box-shadow:0 4px 12px rgba(37,99,235,.2)">🔓</div>
+      <h1 style="font-size:1.125rem;font-weight:600;color:#111827;margin:.75rem 0 0">Unlock your account</h1>
+    </td></tr>
+    <tr><td style="font-size:.875rem;color:#6B7280;line-height:1.6;padding-bottom:1.5rem">
+      <p style="margin:0 0 1rem">Your TSM System account has been locked due to too many failed sign-in attempts. Click the button below to unlock it.</p>
+    </td></tr>
+    <tr><td style="text-align:center;padding-bottom:1.5rem">
+      <a href="<%= unlock_url(@resource, unlock_token: @token) %>" style="display:inline-block;background:#2563EB;color:#fff;font-size:.875rem;font-weight:500;padding:.75rem 1.5rem;border-radius:8px;text-decoration:none">Unlock Account</a>
+    </td></tr>
+    <tr><td style="font-size:.75rem;color:#9CA3AF;text-align:center">
+      <p style="margin:0">If you didn't request this, please ignore this email.</p>
+    </td></tr>
+  </table>
+</body>
+</html>
