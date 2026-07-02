@@ -1,74 +1,128 @@
 <% content_for :page_title, "Dashboard" %>
 
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-  <div class="bg-white rounded-lg shadow p-5 border-l-4 border-blue-500">
-    <div class="text-3xl font-bold text-blue-600"><%= @today_export %></div>
-    <div class="text-gray-600">📤 Today's Export</div>
+<div class="space-y-6">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-xl font-semibold text-gray-900">Dashboard</h1>
+      <p class="text-sm text-gray-500 mt-0.5"><%= l(Date.current, format: :long) %></p>
+    </div>
+    <%= link_to new_shipment_path, class: "hidden sm:flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors" do %>
+      <%= plus_icon %>
+      New Shipment
+    <% end if policy(Shipment).new? %>
   </div>
-  <div class="bg-white rounded-lg shadow p-5 border-l-4 border-purple-500">
-    <div class="text-3xl font-bold text-purple-600"><%= @today_import %></div>
-    <div class="text-gray-600">📥 Today's Import</div>
-  </div>
-  <div class="bg-white rounded-lg shadow p-5 border-l-4 border-orange-500">
-    <div class="text-3xl font-bold text-orange-600"><%= @active_trucks %></div>
-    <div class="text-gray-600">🚛 Active Trucks</div>
-  </div>
-  <div class="bg-white rounded-lg shadow p-5 border-l-4 border-green-500">
-    <div class="text-3xl font-bold text-green-600"><%= @completed_today %></div>
-    <div class="text-gray-600">✅ Completed Today</div>
-  </div>
-</div>
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-  <div class="bg-white rounded-lg shadow p-5 border-l-4 border-blue-500">
-    <div class="text-2xl font-bold"><%= @loading_trucks %></div>
-    <div class="text-gray-600">🔄 Loading</div>
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="animate-slide-up stagger-1"><%= render StatCardComponent.new(label: "Active Shipments", value: @active_shipments, icon: "📤", color: "text-blue-600", trend: "Today so far", trend_up: true) %></div>
+    <div class="animate-slide-up stagger-2"><%= render StatCardComponent.new(label: "Completed Today", value: @completed_today, icon: "✅", color: "text-green-600", trend: "#{@completed_percentage}% rate", trend_up: @completed_percentage > 50) %></div>
+    <div class="animate-slide-up stagger-3"><%= render StatCardComponent.new(label: "Total Trucks", value: @total_trucks, icon: "🚛", color: "text-purple-600", trend: "#{@active_trucks} on route") %></div>
+    <div class="animate-slide-up stagger-4"><%= render StatCardComponent.new(label: "Drivers on Duty", value: @drivers_on_duty, icon: "👨‍✈️", color: "text-teal-600", trend: "Today active", trend_up: true) %></div>
   </div>
-  <div class="bg-white rounded-lg shadow p-5 border-l-4 border-teal-500">
-    <div class="text-2xl font-bold"><%= @reached_shipments %></div>
-    <div class="text-gray-600">📍 Reached</div>
-  </div>
-  <div class="bg-white rounded-lg shadow p-5 border-l-4 border-yellow-500">
-    <div class="text-2xl font-bold"><%= @pending_shipments %></div>
-    <div class="text-gray-600">⏳ Pending</div>
-  </div>
-</div>
 
-<div class="bg-white rounded-lg shadow p-5 mb-6">
-  <h3 class="font-semibold text-gray-700 mb-3">📊 Completion Rate</h3>
-  <div class="w-full bg-gray-200 rounded-full h-4">
-    <div class="bg-green-500 h-4 rounded-full" style="width: <%= @completed_percentage %>%"></div>
-  </div>
-  <p class="text-sm text-gray-500 mt-1"><%= @completed_percentage %>% completed today</p>
-</div>
-
-<div class="bg-white rounded-lg shadow p-5">
-  <div class="flex justify-between items-center mb-4">
-    <h3 class="font-semibold text-gray-700">📦 Recent Shipments</h3>
-    <%= link_to "View All", shipments_path, class: "text-sm text-blue-600 hover:text-blue-800" %>
-  </div>
-  <div class="overflow-x-auto">
-    <table class="min-w-full divide-y divide-gray-200">
-      <thead class="bg-gray-50">
-        <tr>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">#</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Truck</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-        </tr>
-      </thead>
-      <tbody class="divide-y divide-gray-200">
-        <% @recent_shipments.each do |s| %>
-          <tr class="hover:bg-gray-50">
-            <td class="px-4 py-2"><%= link_to s.shipment_number, s, class: "text-blue-600 hover:text-blue-800" %></td>
-            <td class="px-4 py-2"><%= status_badge(s.shipment_type) %></td>
-            <td class="px-4 py-2"><%= s.truck&.truck_number || "—" %></td>
-            <td class="px-4 py-2"><%= status_badge(s.status) %></td>
-            <td class="px-4 py-2 text-sm"><%= l(s.shipment_date, format: :short) %></td>
-          </tr>
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+    <div class="lg:col-span-2 bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-sm font-semibold text-gray-900">Weekly Shipments</h2>
+        <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-md">This Week</span>
+      </div>
+      <div class="space-y-3">
+        <% max_val = [@weekly_data.map { |d| d[:export] + d[:import] }.max, 1].max %>
+        <% @weekly_data.each do |data| %>
+          <div class="flex items-center gap-3 text-xs">
+            <span class="w-8 text-gray-500 font-medium"><%= data[:day] %></span>
+            <div class="flex-1 space-y-1">
+              <div class="flex items-center gap-1">
+                <div class="h-3 bg-blue-600 rounded-sm" style="width: <%= (data[:export].to_f / max_val * 100).clamp(0, 100) %>%"></div>
+                <span class="text-gray-400"><%= data[:export] %></span>
+              </div>
+              <div class="flex items-center gap-1">
+                <div class="h-3 bg-teal-500 rounded-sm" style="width: <%= (data[:import].to_f / max_val * 100).clamp(0, 100) %>%"></div>
+                <span class="text-gray-400"><%= data[:import] %></span>
+              </div>
+            </div>
+          </div>
         <% end %>
-      </tbody>
-    </table>
+      </div>
+      <div class="flex items-center gap-4 mt-3 pt-3 border-t border-gray-100">
+        <div class="flex items-center gap-1.5 text-xs text-gray-500"><span class="w-3 h-3 rounded-sm bg-blue-600 inline-block"></span> Export</div>
+        <div class="flex items-center gap-1.5 text-xs text-gray-500"><span class="w-3 h-3 rounded-sm bg-teal-500 inline-block"></span> Import</div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+      <h2 class="text-sm font-semibold text-gray-900 mb-4">Top Routes</h2>
+      <div class="space-y-3">
+        <% if @top_routes.any? %>
+          <% max_route_count = @top_routes.first[:count] %>
+          <% @top_routes.each_with_index do |r, i| %>
+            <% colors = ["bg-blue-500", "bg-teal-500", "bg-purple-400", "bg-green-400", "bg-orange-400"] %>
+            <div>
+              <div class="flex items-center justify-between text-xs mb-1">
+                <span class="font-mono text-gray-700"><%= r[:name] %></span>
+                <span class="text-gray-500 font-medium"><%= r[:count] %></span>
+              </div>
+              <div class="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                <div class="h-full rounded-full <%= colors[i % colors.length] %>" style="width: <%= (r[:count].to_f / max_route_count * 100).clamp(0, 100) %>%"></div>
+              </div>
+            </div>
+          <% end %>
+        <% else %>
+          <p class="text-sm text-gray-400 text-center py-6">No route data yet</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+    <div class="lg:col-span-1 bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+      <h2 class="text-sm font-semibold text-gray-900 mb-4">Shipment Status</h2>
+      <div class="space-y-2.5">
+        <% %w[pending loading loaded on_the_way reached unloading completed].each do |status| %>
+          <div class="flex items-center justify-between">
+            <%= status_badge(status) %>
+            <span class="font-mono text-sm font-semibold text-gray-700"><%= @status_counts[status] || 0 %></span>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="lg:col-span-2 bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+        <h2 class="text-sm font-semibold text-gray-900">Recent Shipments</h2>
+        <%= link_to shipments_path, class: "text-xs text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1" do %>
+          View All
+          <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        <% end %>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="min-w-full">
+          <thead>
+            <tr class="bg-gray-50 border-b border-gray-100">
+              <th class="px-4 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">ID</th>
+              <th class="px-4 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Route</th>
+              <th class="px-4 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
+              <th class="px-4 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Driver</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-50">
+            <% @recent_shipments.each do |s| %>
+              <tr class="hover:bg-blue-50/40 transition-colors duration-100">
+                <td class="px-4 py-3">
+                  <%= link_to s.shipment_number, s, class: "font-mono text-xs text-blue-700 font-semibold" %>
+                </td>
+                <td class="px-4 py-3 text-sm text-gray-700">
+                  <%= s.source_location&.name %> → <%= s.destination_location&.name %>
+                </td>
+                <td class="px-4 py-3"><%= status_badge(s.status) %></td>
+                <td class="px-4 py-3 text-sm text-gray-600"><%= s.truck&.current_driver&.name || "—" %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <% if @recent_shipments.empty? %>
+          <%= render EmptyStateComponent.new(icon: "📋", title: "No shipments yet", description: "Create your first shipment to get started") %>
+        <% end %>
+      </div>
+    </div>
   </div>
 </div>

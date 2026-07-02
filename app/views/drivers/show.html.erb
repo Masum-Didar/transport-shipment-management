@@ -1,64 +1,74 @@
-<% content_for :page_title, "Driver: #{@driver.name}" %>
+<% content_for :page_title, @driver.name %>
 
-<div class="flex gap-2 mb-4">
-  <%= link_to "← Back", drivers_path, class: "text-blue-600 hover:text-blue-800" %>
-  <%= link_to "✏️ Edit", edit_driver_path(@driver), class: "text-blue-600 hover:text-blue-800" if policy(@driver).edit? %>
-</div>
-
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-  <div class="bg-white rounded-lg shadow p-6">
-    <h3 class="font-semibold text-gray-700 mb-4">Driver Details</h3>
-    <dl class="space-y-3">
-      <div class="flex justify-between"><dt class="text-gray-500">Name:</dt><dd class="font-medium"><%= @driver.name %></dd></div>
-      <div class="flex justify-between"><dt class="text-gray-500">Phone:</dt><dd><%= @driver.phone %></dd></div>
-      <div class="flex justify-between"><dt class="text-gray-500">Alt Phone:</dt><dd><%= @driver.alternative_phone || "—" %></dd></div>
-      <div class="flex justify-between"><dt class="text-gray-500">License:</dt><dd><%= @driver.license_number || "—" %></dd></div>
-      <div class="flex justify-between"><dt class="text-gray-500">Status:</dt><dd><%= status_badge(@driver.status) %></dd></div>
-      <div class="flex justify-between"><dt class="text-gray-500">Address:</dt><dd><%= @driver.address.presence || "—" %></dd></div>
-    </dl>
+<div class="space-y-4">
+  <div class="flex items-center gap-3">
+    <%= link_to drivers_path, class: "p-2 hover:bg-gray-100 rounded-lg text-gray-500 transition-colors" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    <% end %>
+    <h1 class="text-lg font-semibold text-gray-900"><%= @driver.name %></h1>
+    <%= link_to edit_driver_path(@driver), class: "ml-auto flex items-center gap-1.5 px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors" do %>
+      <%= edit_icon %> Edit
+    <% end if policy(@driver).edit? %>
   </div>
 
-  <div class="bg-white rounded-lg shadow p-6">
-    <h3 class="font-semibold text-gray-700 mb-4">🚛 Current Truck</h3>
-    <% if @current_truck %>
-      <p><%= link_to @current_truck.truck_number, @current_truck, class: "text-blue-600 hover:text-blue-800" %></p>
-    <% else %>
-      <p class="text-gray-500">Not assigned to any truck</p>
-    <% end %>
-
-    <% if policy(DriverAssignment).create? %>
-      <%= form_with model: DriverAssignment.new, local: true, class: "mt-4 p-3 bg-gray-50 rounded" do |f| %>
-        <h4 class="text-sm font-medium mb-2">Assign to Truck</h4>
-        <%= f.hidden_field :driver_id, value: @driver.id %>
-        <%= f.collection_select :truck_id, Truck.available, :id, :display_name, { prompt: "Select Truck" }, class: "block w-full rounded border-gray-300 text-sm mb-2" %>
-        <%= f.submit "Assign", class: "bg-blue-600 text-white px-3 py-1.5 rounded text-sm hover:bg-blue-700" %>
-      <% end %>
-    <% end %>
-  </div>
-</div>
-
-<div class="bg-white rounded-lg shadow p-6 mt-6">
-  <h3 class="font-semibold text-gray-700 mb-4">📜 Assignment History</h3>
-  <div class="overflow-x-auto">
-    <table class="min-w-full divide-y divide-gray-200">
-      <thead class="bg-gray-50">
-        <tr>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Truck</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Assigned By</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">From</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">To</th>
-        </tr>
-      </thead>
-      <tbody class="divide-y divide-gray-200">
-        <% @assignments.each do |a| %>
-          <tr>
-            <td class="px-4 py-2"><%= link_to a.truck.truck_number, a.truck, class: "text-blue-600" %></td>
-            <td class="px-4 py-2"><%= a.assigned_by.name %></td>
-            <td class="px-4 py-2 text-sm"><%= l(a.assigned_at, format: :short) %></td>
-            <td class="px-4 py-2 text-sm"><%= a.released_at ? l(a.released_at, format: :short) : "🟢 Current" %></td>
-          </tr>
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+    <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 text-center">
+      <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-2xl font-bold text-blue-700 mx-auto mb-3">
+        <%= @driver.name.split.map { |n| n[0] }.join[0..1].upcase %>
+      </div>
+      <div class="font-semibold text-gray-900 text-base"><%= @driver.name %></div>
+      <div class="mt-2"><%= status_badge(@driver.status) %></div>
+      <div class="mt-4 space-y-2 text-sm text-left">
+        <% details = [
+          { label: "Phone", value: @driver.phone },
+          { label: "Alt Phone", value: @driver.alternative_phone.presence || "—" },
+          { label: "License", value: @driver.license_number.presence || "—" },
+          { label: "Address", value: @driver.address.presence || "—" },
+          { label: "Truck", value: @current_truck&.truck_number || "Unassigned" },
+        ] %>
+        <% details.each do |r| %>
+          <div class="flex justify-between py-1.5 border-b border-gray-50 last:border-0">
+            <span class="text-gray-500 text-xs"><%= r[:label] %></span>
+            <span class="font-mono text-xs font-medium text-gray-800"><%= r[:value] %></span>
+          </div>
         <% end %>
-      </tbody>
-    </table>
+      </div>
+    </div>
+
+    <div class="lg:col-span-2 space-y-4">
+      <% if @current_truck.nil? && policy(DriverAssignment).create? %>
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+          <h2 class="text-sm font-semibold text-gray-900 mb-3">🚛 Assign to Truck</h2>
+          <%= form_with model: DriverAssignment.new, local: true, class: "flex items-center gap-3" do |f| %>
+            <%= f.hidden_field :driver_id, value: @driver.id %>
+            <%= f.collection_select :truck_id, Truck.available, :id, :display_name, { prompt: "Select Truck" }, class: "flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" %>
+            <%= f.submit "Assign", class: "bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors" %>
+          <% end %>
+        </div>
+      <% end %>
+
+      <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+        <h2 class="text-sm font-semibold text-gray-900 mb-4">⏱️ Assignment Timeline</h2>
+        <div class="space-y-4">
+          <% if @assignments.any? %>
+            <% @assignments.each do |a| %>
+              <div class="flex items-center gap-4">
+                <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 <%= a.released_at.nil? ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500' %>">
+                  <%= a.released_at.nil? ? raw('<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>') : raw('<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/></svg>') %>
+                </div>
+                <div class="flex-1">
+                  <span class="text-sm font-medium text-gray-800"><%= a.released_at.nil? ? "Assigned" : "Released" %></span>
+                  <span class="text-gray-400 mx-2">→</span>
+                  <span class="font-mono text-sm font-bold text-blue-700"><%= link_to a.truck.truck_number, a.truck, class: "text-blue-700 hover:text-blue-900" %></span>
+                </div>
+                <span class="text-xs text-gray-400"><%= l(a.assigned_at, format: :short) %></span>
+              </div>
+            <% end %>
+          <% else %>
+            <p class="text-sm text-gray-400 text-center py-4">No assignment history</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

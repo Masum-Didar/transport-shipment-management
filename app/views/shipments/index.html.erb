@@ -1,50 +1,101 @@
 <% content_for :page_title, "Shipments" %>
 
-<div class="flex justify-between items-center mb-4">
-  <%= form_tag shipments_path, method: :get, class: "flex gap-2 items-center flex-wrap" do %>
-    <%= text_field_tag :q, params[:q], placeholder: "Search #...", class: "rounded border-gray-300 text-sm px-3 py-1.5 w-32" %>
-    <%= select_tag :type, options_for_select([["All Types", ""], ["Import", "import"], ["Export", "export"]], params[:type]), class: "rounded border-gray-300 text-sm px-3 py-1.5" %>
-    <%= select_tag :status, options_for_select([["All Status", ""], "Pending", "Loading", "Loaded", "On The Way", "Reached", "Unloading", "Completed"], params[:status]), class: "rounded border-gray-300 text-sm px-3 py-1.5" %>
-    <%= date_field_tag :from_date, params[:from_date], class: "rounded border-gray-300 text-sm px-3 py-1.5" %>
-    <%= date_field_tag :to_date, params[:to_date], class: "rounded border-gray-300 text-sm px-3 py-1.5" %>
-    <%= submit_tag "Filter", class: "bg-gray-100 text-gray-700 px-3 py-1.5 rounded text-sm hover:bg-gray-200" %>
-  <% end %>
-  <%= link_to "+ New Shipment", new_shipment_path, class: "bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700" if policy(Shipment).new? %>
-</div>
+<div class="space-y-4">
+  <div class="flex items-center justify-between">
+    <h1 class="text-xl font-semibold text-gray-900">Shipments</h1>
+    <%= link_to new_shipment_path, class: "flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors" do %>
+      <%= plus_icon %>
+      New Shipment
+    <% end if policy(Shipment).new? %>
+  </div>
 
-<div class="bg-white rounded-lg shadow overflow-hidden">
-  <table class="min-w-full divide-y divide-gray-200">
-    <thead class="bg-gray-50">
-      <tr>
-        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">#</th>
-        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
-        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Source → Destination</th>
-        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Truck</th>
-        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
-      </tr>
-    </thead>
-    <tbody class="divide-y divide-gray-200">
-      <% @shipments.each do |s| %>
-        <tr class="hover:bg-gray-50">
-          <td class="px-4 py-3"><%= link_to s.shipment_number, s, class: "text-blue-600 hover:text-blue-800 font-medium" %></td>
-          <td class="px-4 py-3"><%= status_badge(s.shipment_type) %></td>
-          <td class="px-4 py-3 text-sm"><%= s.source_location&.name %> → <%= s.destination_location&.name %></td>
-          <td class="px-4 py-3 text-sm"><%= s.truck&.truck_number || "—" %></td>
-          <td class="px-4 py-3"><%= status_badge(s.status) %></td>
-          <td class="px-4 py-3 text-sm"><%= l(s.shipment_date, format: :short) %></td>
-          <td class="px-4 py-3">
-            <%= link_to "👁", s, class: "text-gray-600 hover:text-gray-800 mr-2", title: "View" %>
-            <% if policy(s).update_status? && s.status != "completed" %>
-              <%= link_to "✏️", edit_shipment_path(s), class: "text-gray-600 hover:text-gray-800 mr-2", title: "Edit" %>
-            <% end %>
-          </td>
-        </tr>
+  <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
+    <%= form_tag shipments_path, method: :get, class: "flex flex-wrap items-center gap-3" do %>
+      <div class="relative flex-1 min-w-48">
+        <%= search_icon %>
+        <%= text_field_tag :q, params[:q], placeholder: "Search...", class: "w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" %>
+      </div>
+      <%= select_tag :type, options_for_select([["All Types", ""], ["Export", "export"], ["Import", "import"]], params[:type]), class: "px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" %>
+      <%= select_tag :status, options_for_select([["All Status", ""], "Pending", "Loading", "Loaded", "On The Way", "Reached", "Unloading", "Completed"], params[:status]), class: "px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" %>
+      <%= select_tag :truck_id, options_from_collection_for_select(Truck.kept, :id, :truck_number, params[:truck_id]), prompt: "All Trucks", class: "px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" %>
+      <%= submit_tag "Filter", class: "bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors" %>
+      <% if params[:q].present? || params[:type].present? || params[:status].present? || params[:truck_id].present? %>
+        <%= link_to shipments_path, class: "text-xs text-gray-500 hover:text-gray-700 flex items-center gap-1 px-2 py-2 rounded-lg hover:bg-gray-100" do %>
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          Clear
+        <% end %>
       <% end %>
-    </tbody>
-  </table>
-  <% if @shipments.empty? %>
-    <p class="text-center text-gray-500 py-8">No shipments found.</p>
-  <% end %>
+    <% end %>
+  </div>
+
+  <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="min-w-full">
+        <thead>
+          <tr class="bg-gray-50 border-b border-gray-200">
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">#</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Type</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Route</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Truck</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Driver</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <% if @shipments.empty? %>
+            <tr>
+              <td colspan="8">
+                <%= render EmptyStateComponent.new(icon: "📋", title: "No shipments found", description: "Try adjusting your search or filters", action: link_to("+ New Shipment", new_shipment_path, class: "inline-block bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700")) %>
+              </td>
+            </tr>
+          <% else %>
+            <% @shipments.each do |s| %>
+              <tr class="hover:bg-blue-50/40 transition-colors duration-100">
+                <td class="px-4 py-3">
+                  <%= link_to s.shipment_number, s, class: "font-mono text-xs text-blue-700 font-semibold" %>
+                </td>
+                <td class="px-4 py-3">
+                  <span class="text-xs font-medium px-2 py-0.5 rounded <%= s.shipment_type == "export" ? "bg-blue-100 text-blue-700" : "bg-teal-100 text-teal-700" %>">
+                    <%= s.shipment_type == "export" ? "📤" : "📥" %> <%= s.shipment_type.titleize %>
+                  </span>
+                </td>
+                <td class="px-4 py-3 text-sm text-gray-700 font-medium"><%= s.source_location&.name %> → <%= s.destination_location&.name %></td>
+                <td class="px-4 py-3"><%= status_badge(s.status) %></td>
+                <td class="px-4 py-3 font-mono text-xs text-gray-600"><%= s.truck&.truck_number || "—" %></td>
+                <td class="px-4 py-3 text-sm text-gray-600"><%= s.truck&.current_driver&.name || "—" %></td>
+                <td class="px-4 py-3 text-xs text-gray-500 whitespace-nowrap"><%= l(s.shipment_date, format: :short) %></td>
+                <td class="px-4 py-3">
+                  <div class="flex items-center gap-1">
+                    <%= link_to shipment_path(s), class: "p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors", title: "View" do %>
+                      <%= eye_icon %>
+                    <% end %>
+                    <% if policy(s).edit? && s.status != "completed" %>
+                      <%= link_to edit_shipment_path(s), class: "p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-md transition-colors", title: "Edit" do %>
+                        <%= edit_icon %>
+                      <% end %>
+                    <% end %>
+                    <% if policy(s).destroy? %>
+                      <%= link_to s, method: :delete, data: { confirm: "Are you sure you want to delete this shipment?" }, class: "p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors", title: "Delete" do %>
+                        <%= trash_icon %>
+                      <% end %>
+                    <% end %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <% if @shipments.any? %>
+      <div class="px-4 py-3 border-t border-gray-100 flex items-center justify-between">
+        <p class="text-xs text-gray-500"><%== pagy_info(@pagy) if defined?(@pagy) %></p>
+        <% if defined?(@pagy) %>
+          <div class="flex items-center gap-1"><%== pagy_nav(@pagy) %></div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
 </div>

@@ -1,65 +1,86 @@
-<% content_for :page_title, "Truck ##{@truck.truck_number}" %>
+<% content_for :page_title, @truck.truck_number %>
 
-<div class="flex gap-2 mb-4">
-  <%= link_to "← Back", trucks_path, class: "text-blue-600 hover:text-blue-800" %>
-  <%= link_to "✏️ Edit", edit_truck_path(@truck), class: "text-blue-600 hover:text-blue-800" if policy(@truck).edit? %>
-</div>
-
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-  <div class="bg-white rounded-lg shadow p-6">
-    <h3 class="font-semibold text-gray-700 mb-4">Truck Details</h3>
-    <dl class="space-y-3">
-      <div class="flex justify-between"><dt class="text-gray-500">Number:</dt><dd class="font-medium"><%= @truck.truck_number %></dd></div>
-      <div class="flex justify-between"><dt class="text-gray-500">Type:</dt><dd><%= status_badge(@truck.truck_type) %></dd></div>
-      <div class="flex justify-between"><dt class="text-gray-500">Status:</dt><dd><%= status_badge(@truck.status) %></dd></div>
-      <div class="flex justify-between"><dt class="text-gray-500">Brand:</dt><dd><%= @truck.brand || "—" %></dd></div>
-      <div class="flex justify-between"><dt class="text-gray-500">Model:</dt><dd><%= @truck.vehicle_model || "—" %></dd></div>
-      <div class="flex justify-between"><dt class="text-gray-500">Year:</dt><dd><%= @truck.year || "—" %></dd></div>
-      <div class="flex justify-between"><dt class="text-gray-500">Capacity:</dt><dd><%= number_with_delimiter(@truck.capacity_kg) %> kg</dd></div>
-      <div class="flex justify-between"><dt class="text-gray-500">Location:</dt><dd><%= @truck.current_location&.name || "—" %></dd></div>
-    </dl>
+<div class="space-y-4">
+  <div class="flex items-center gap-3">
+    <%= link_to trucks_path, class: "p-2 hover:bg-gray-100 rounded-lg text-gray-500 transition-colors" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    <% end %>
+    <div>
+      <h1 class="text-lg font-bold text-gray-900 font-mono"><%= @truck.truck_number %></h1>
+      <p class="text-xs text-gray-500"><%= @truck.truck_type.titleize %> Truck · <%= number_with_delimiter(@truck.capacity_kg) %> kg Capacity</p>
+    </div>
+    <%= link_to edit_truck_path(@truck), class: "ml-auto flex items-center gap-1.5 px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors" do %>
+      <%= edit_icon %> Edit
+    <% end if policy(@truck).edit? %>
   </div>
 
-  <div class="bg-white rounded-lg shadow p-6">
-    <h3 class="font-semibold text-gray-700 mb-4">👨‍✈️ Current Driver</h3>
-    <% if @truck.current_driver %>
-      <p><%= link_to @truck.current_driver.name, @truck.current_driver, class: "text-blue-600 hover:text-blue-800" %></p>
-    <% else %>
-      <p class="text-gray-500">No driver assigned</p>
-    <% end %>
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+    <div class="lg:col-span-1 space-y-4">
+      <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+        <div class="text-center mb-5">
+          <div class="text-5xl mb-3">🚛</div>
+          <div class="font-mono text-xl font-bold text-gray-900"><%= @truck.truck_number %></div>
+          <div class="mt-2"><%= status_badge(@truck.status) %></div>
+        </div>
+        <div class="space-y-3 text-sm">
+          <% details = [
+            { label: "Type", value: @truck.truck_type.titleize },
+            { label: "Capacity", value: "#{number_with_delimiter(@truck.capacity_kg)} kg" },
+            { label: "Brand", value: @truck.brand.presence || "—" },
+            { label: "Model", value: @truck.vehicle_model.presence || "—" },
+            { label: "Year", value: @truck.year.presence || "—" },
+            { label: "Location", value: @truck.current_location&.name || "—" },
+          ] %>
+          <% details.each do |r| %>
+            <div class="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
+              <span class="text-gray-500 text-xs"><%= r[:label] %></span>
+              <span class="font-medium text-gray-800"><%= r[:value] %></span>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
 
-    <h3 class="font-semibold text-gray-700 mt-6 mb-4">📋 Current Shipment</h3>
-    <% if @current_shipment %>
-      <p><%= link_to @current_shipment.shipment_number, @current_shipment, class: "text-blue-600 hover:text-blue-800" %></p>
-      <p class="text-sm text-gray-500"><%= @current_shipment.source_location&.name %> → <%= @current_shipment.destination_location&.name %></p>
-    <% else %>
-      <p class="text-gray-500">No active shipment</p>
-    <% end %>
-  </div>
-</div>
+    <div class="lg:col-span-2 space-y-4">
+      <% if @current_shipment %>
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+          <h2 class="text-sm font-semibold text-gray-900 mb-3">Current Shipment</h2>
+          <%= link_to shipment_path(@current_shipment), class: "flex items-center justify-between p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors" do %>
+            <div>
+              <div class="font-mono text-sm font-bold text-blue-700"><%= @current_shipment.shipment_number %></div>
+              <div class="text-xs text-gray-500 mt-0.5"><%= @current_shipment.source_location&.name %> → <%= @current_shipment.destination_location&.name %> · <%= @current_shipment.shipment_type.titleize %></div>
+            </div>
+            <%= status_badge(@current_shipment.status) %>
+          <% end %>
+        </div>
+      <% end %>
 
-<div class="bg-white rounded-lg shadow p-6 mt-6">
-  <h3 class="font-semibold text-gray-700 mb-4">📜 Driver Assignment History</h3>
-  <div class="overflow-x-auto">
-    <table class="min-w-full divide-y divide-gray-200">
-      <thead class="bg-gray-50">
-        <tr>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Driver</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Assigned By</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Assigned At</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Released At</th>
-        </tr>
-      </thead>
-      <tbody class="divide-y divide-gray-200">
-        <% @driver_assignments.each do |da| %>
-          <tr>
-            <td class="px-4 py-2"><%= link_to da.driver.name, da.driver, class: "text-blue-600" %></td>
-            <td class="px-4 py-2"><%= da.assigned_by.name %></td>
-            <td class="px-4 py-2 text-sm"><%= l(da.assigned_at, format: :short) %></td>
-            <td class="px-4 py-2 text-sm"><%= da.released_at ? l(da.released_at, format: :short) : "🟢 Current" %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+      <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+        <h2 class="text-sm font-semibold text-gray-900 mb-4">Driver Assignment History</h2>
+        <div class="space-y-3">
+          <% if @driver_assignments.any? %>
+            <% @driver_assignments.each do |da| %>
+              <div class="flex items-center gap-3 py-2 border-b border-gray-50 last:border-0">
+                <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold <%= da.released_at.nil? ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500' %>">
+                  <%= da.released_at.nil? ? raw('<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>') : raw('<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/></svg>') %>
+                </div>
+                <div class="flex-1">
+                  <div class="text-sm font-medium text-gray-800"><%= link_to da.driver.name, da.driver, class: "text-blue-600 hover:text-blue-800" %></div>
+                  <div class="text-xs text-gray-500"><%= da.released_at.nil? ? "Currently assigned" : "Released" %></div>
+                </div>
+                <div class="text-xs text-gray-400">
+                  <%= l(da.assigned_at, format: :short) %>
+                  <% if da.released_at %>
+                    <br>→ <%= l(da.released_at, format: :short) %>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          <% else %>
+            <p class="text-sm text-gray-400 text-center py-4">No assignment history</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
