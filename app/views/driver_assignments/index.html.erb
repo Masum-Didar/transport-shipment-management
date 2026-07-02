@@ -1,26 +1,40 @@
 <% content_for :page_title, "Driver Assignments" %>
 
-<div class="bg-white rounded-lg shadow overflow-hidden">
-  <table class="min-w-full divide-y divide-gray-200">
-    <thead class="bg-gray-50">
-      <tr>
-        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Driver</th>
-        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Truck</th>
-        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Assigned By</th>
-        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">From</th>
-        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">To</th>
-      </tr>
-    </thead>
-    <tbody class="divide-y divide-gray-200">
-      <% @assignments.each do |a| %>
-        <tr>
-          <td class="px-4 py-3"><%= link_to a.driver.name, a.driver, class: "text-blue-600" %></td>
-          <td class="px-4 py-3"><%= link_to a.truck.truck_number, a.truck, class: "text-blue-600" %></td>
-          <td class="px-4 py-3 text-sm"><%= a.assigned_by.name %></td>
-          <td class="px-4 py-3 text-sm"><%= l(a.assigned_at, format: :short) %></td>
-          <td class="px-4 py-3 text-sm"><%= a.released_at ? l(a.released_at, format: :short) : status_badge("active") %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+<div class="space-y-4">
+  <h1 class="text-xl font-semibold text-gray-900">Driver Assignments</h1>
+
+  <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="min-w-full">
+        <thead>
+          <tr class="bg-gray-50 border-b border-gray-200">
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Driver</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Truck</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Assigned By</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">From</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">To</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <% if @assignments.empty? %>
+            <tr>
+              <td colspan="5">
+                <%= render EmptyStateComponent.new(icon: "👨‍✈️", title: "No assignments yet", description: "Assign a driver to a truck to get started") %>
+              </td>
+            </tr>
+          <% else %>
+            <% @assignments.each do |a| %>
+              <tr class="hover:bg-blue-50/40 transition-colors duration-100">
+                <td class="px-4 py-3"><%= link_to a.driver.name, a.driver, class: "text-sm font-medium text-blue-600 hover:text-blue-800" %></td>
+                <td class="px-4 py-3"><%= link_to a.truck.truck_number, a.truck, class: "font-mono text-sm font-medium text-blue-600 hover:text-blue-800" %></td>
+                <td class="px-4 py-3 text-sm text-gray-600"><%= a.assigned_by.name %></td>
+                <td class="px-4 py-3 text-sm text-gray-600"><%= l(a.assigned_at, format: :short) %></td>
+                <td class="px-4 py-3 text-sm text-gray-600"><%= a.released_at ? l(a.released_at, format: :short) : status_badge("active") %></td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

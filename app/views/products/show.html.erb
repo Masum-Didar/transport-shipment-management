@@ -1,13 +1,29 @@
 <% content_for :page_title, @product.name %>
-<div class="flex gap-2 mb-4">
-  <%= link_to "← Back", products_path, class: "text-blue-600 hover:text-blue-800" %>
-  <%= link_to "✏️ Edit", edit_product_path(@product), class: "text-blue-600 hover:text-blue-800" if policy(@product).edit? %>
-</div>
-<div class="bg-white rounded-lg shadow p-6 max-w-lg">
-  <dl class="space-y-3">
-    <div class="flex justify-between"><dt class="text-gray-500">Name:</dt><dd class="font-medium"><%= @product.name %></dd></div>
-    <div class="flex justify-between"><dt class="text-gray-500">Category:</dt><dd><%= @product.product_category&.name || "—" %></dd></div>
-    <div class="flex justify-between"><dt class="text-gray-500">Unit:</dt><dd><%= @product.default_unit %></dd></div>
-    <div class="flex justify-between"><dt class="text-gray-500">Description:</dt><dd><%= @product.description.presence || "—" %></dd></div>
-  </dl>
+
+<div class="space-y-4">
+  <div class="flex items-center gap-3">
+    <%= link_to products_path, class: "p-2 hover:bg-gray-100 rounded-lg text-gray-500 transition-colors" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    <% end %>
+    <h1 class="text-lg font-semibold text-gray-900"><%= @product.name %></h1>
+    <%= link_to edit_product_path(@product), class: "ml-auto flex items-center gap-1.5 px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors" do %>
+      <%= edit_icon %> Edit
+    <% end if policy(@product).edit? %>
+  </div>
+
+  <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 max-w-lg">
+    <div class="space-y-4">
+      <% details = [
+        { label: "Category", value: @product.product_category&.name || "—" },
+        { label: "Unit", value: @product.default_unit },
+        { label: "Description", value: @product.description.presence || "—" },
+      ] %>
+      <% details.each do |r| %>
+        <div class="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
+          <span class="text-sm text-gray-500"><%= r[:label] %></span>
+          <span class="text-sm font-medium text-gray-800"><%= r[:value] %></span>
+        </div>
+      <% end %>
+    </div>
+  </div>
 </div>

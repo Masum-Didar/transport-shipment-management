@@ -1,29 +1,32 @@
 <%= render "shared/form_errors", object: route %>
-<%= form_with model: route, class: "space-y-4" do |f| %>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <div>
-      <%= f.label :from_location_id, "From", class: "block text-sm font-medium text-gray-700" %>
-      <%= f.collection_select :from_location_id, Location.kept, :id, :name, { prompt: "Select" }, required: true, class: "mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+<%= form_with model: route, class: "space-y-6" do |f| %>
+  <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+    <h4 class="text-sm font-semibold text-gray-900 mb-4">🗺️ Route Details</h4>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="space-y-1">
+        <%= f.label :from_location_id, "From", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.collection_select :from_location_id, Location.kept, :id, :name, { prompt: "Select" }, required: true, class: "block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" %>
+      </div>
+      <div class="space-y-1">
+        <%= f.label :to_location_id, "To", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.collection_select :to_location_id, Location.kept, :id, :name, { prompt: "Select" }, required: true, class: "block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" %>
+      </div>
+      <div class="space-y-1">
+        <%= f.label :distance_km, "Distance (km)", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.number_field :distance_km, step: 0.01, class: "block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" %>
+      </div>
+      <div class="space-y-1">
+        <%= f.label :estimated_hours, "Est. Time (hrs)", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.number_field :estimated_hours, step: 0.5, class: "block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" %>
+      </div>
     </div>
-    <div>
-      <%= f.label :to_location_id, "To", class: "block text-sm font-medium text-gray-700" %>
-      <%= f.collection_select :to_location_id, Location.kept, :id, :name, { prompt: "Select" }, required: true, class: "mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+    <div class="mt-4 space-y-1">
+      <%= f.label :notes, class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_area :notes, rows: 2, class: "block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" %>
     </div>
-    <div>
-      <%= f.label :distance_km, "Distance (km)", class: "block text-sm font-medium text-gray-700" %>
-      <%= f.number_field :distance_km, step: 0.01, class: "mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
-    </div>
-    <div>
-      <%= f.label :estimated_hours, "Est. Time (hrs)", class: "block text-sm font-medium text-gray-700" %>
-      <%= f.number_field :estimated_hours, step: 0.5, class: "mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
-    </div>
-  </div>
-  <div>
-    <%= f.label :notes, class: "block text-sm font-medium text-gray-700" %>
-    <%= f.text_area :notes, rows: 2, class: "mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
   </div>
   <div class="flex gap-2">
-    <%= f.submit class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" %>
-    <%= link_to "Cancel", routes_path, class: "bg-gray-100 text-gray-700 px-4 py-2 rounded hover:bg-gray-200" %>
+    <%= f.submit class: "bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors" %>
+    <%= link_to "Cancel", routes_path, class: "bg-white border border-gray-300 text-gray-700 px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors" %>
   </div>
 <% end %>
