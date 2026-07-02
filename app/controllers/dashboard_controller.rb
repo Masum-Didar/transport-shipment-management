@@ -8,7 +8,7 @@ class DashboardController < AuthenticatedController
     @active_trucks  = Truck.kept.where(status: "on_route").count
     @loading_trucks = Truck.kept.where(status: "loading").count
     @reached_shipments = Shipment.kept.where(status: "reached").count
-    @completed_today  = Shipment.kept.completed.where(actual_delivery_date: Date.current).count
+    @completed_today  = Shipment.kept.where(status: "completed", actual_delivery_date: Date.current).count
     @pending_shipments = Shipment.kept.where(status: "pending").count
 
     total = Shipment.kept.where(shipment_date: Date.current).count
