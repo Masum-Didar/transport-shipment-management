@@ -1,23 +1,49 @@
 <% content_for :page_title, "Product Wise Report" %>
 
-<div class="bg-white rounded-lg shadow p-6 mb-6">
-  <%= form_tag reports_product_wise_path, method: :get, class: "flex gap-2 items-center" do %>
-    <%= select_tag :product_id, options_from_collection_for_select(Product.kept, :id, :name, params[:product_id]), { prompt: "Select Product", class: "rounded border-gray-300 text-sm" } %>
-    <%= date_field_tag :from_date, params[:from_date], class: "rounded border-gray-300 text-sm" %>
-    <%= date_field_tag :to_date, params[:to_date], class: "rounded border-gray-300 text-sm" %>
-    <%= submit_tag "Generate", class: "bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700" %>
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 mb-6">
+  <%= form_tag reports_product_wise_path, method: :get, class: "flex flex-wrap gap-3 items-center" do %>
+    <div class="relative">
+      <%= select_tag :product_id, options_from_collection_for_select(Product.kept, :id, :name, params[:product_id]), { prompt: "Select Product", class: "rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition w-44" } %>
+    </div>
+    <div class="relative">
+      <%= date_field_tag :from_date, params[:from_date], class: "rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" %>
+    </div>
+    <div class="relative">
+      <%= date_field_tag :to_date, params[:to_date], class: "rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" %>
+    </div>
+    <%= submit_tag "Generate", class: "bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition cursor-pointer" %>
   <% end %>
 </div>
 
-<div class="bg-white rounded-lg shadow p-6">
-  <table class="min-w-full divide-y divide-gray-200">
-    <thead class="bg-gray-50">
-      <tr><th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Product</th><th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Total Quantity</th></tr>
-    </thead>
-    <tbody class="divide-y divide-gray-200">
-      <% @grouped.each do |product_id, qty| %>
-        <tr><td class="px-4 py-2"><%= Product.find(product_id).name rescue "Unknown" %></td><td class="px-4 py-2"><%= number_with_delimiter(qty) %></td></tr>
-      <% end %>
-    </tbody>
-  </table>
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+  <div class="px-5 py-4 border-b border-gray-100">
+    <h3 class="text-sm font-semibold text-gray-700">
+      <%= params[:product_id].present? ? Product.find(params[:product_id]).name : "All Products" %>
+    </h3>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
+          <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Quantity</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        <% @grouped.each do |product_id, qty| %>
+          <tr class="hover:bg-gray-50 transition">
+            <td class="px-5 py-3 text-sm text-gray-700"><%= Product.find(product_id).name rescue "Unknown" %></td>
+            <td class="px-5 py-3 text-sm font-medium text-gray-900"><%= number_with_delimiter(qty) %></td>
+          </tr>
+        <% end %>
+        <% if @grouped.empty? %>
+          <tr>
+            <td colspan="2" class="px-5 py-12">
+              <%= render EmptyStateComponent.new(icon: "📦", title: "No data", description: "No product shipments match the selected filters.") %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>

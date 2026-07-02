@@ -1,29 +1,51 @@
 <% content_for :page_title, "Notifications" %>
 
-<div class="flex justify-between items-center mb-4">
-  <span class="text-sm text-gray-500"><%= pluralize(@notifications.count, "notification") %></span>
-  <%= button_to "Mark All Read", mark_all_read_notifications_path, method: :post, class: "text-blue-600 text-sm hover:text-blue-800" %>
+<div class="flex items-center justify-between mb-5">
+  <h2 class="text-lg font-bold text-gray-900">Notifications</h2>
+  <div class="flex items-center gap-3">
+    <span class="text-xs text-gray-400"><%= pluralize @notifications.count, "notification" %></span>
+    <% if @notifications.any? { |n| !n.read } %>
+      <%= button_to "Mark All Read", mark_all_read_notifications_path, method: :post, class: "text-xs text-blue-600 hover:text-blue-800 font-medium" %>
+    <% end %>
+  </div>
 </div>
 
-<div class="bg-white rounded-lg shadow divide-y divide-gray-200">
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 divide-y divide-gray-100 overflow-hidden">
   <% if @notifications.empty? %>
-    <p class="text-center text-gray-500 py-8">No notifications yet.</p>
-  <% end %>
-  <% @notifications.each do |n| %>
-    <div class="p-4 <%= 'bg-blue-50' unless n.read %>">
-      <div class="flex justify-between items-start">
-        <div>
-          <p class="text-sm font-medium"><%= n.title %></p>
-          <p class="text-xs text-gray-500 mt-1"><%= n.message %></p>
-          <p class="text-xs text-gray-400 mt-1"><%= time_ago_in_words(n.created_at) %> ago</p>
-        </div>
-        <div class="flex items-center gap-2">
-          <% unless n.read %>
-            <%= button_to "Mark Read", notification_path(n), method: :patch, class: "text-blue-600 text-xs hover:text-blue-800" %>
+    <div class="px-5 py-14">
+      <%= render EmptyStateComponent.new(icon: "🔔", title: "No notifications", description: "You're all caught up!") %>
+    </div>
+  <% else %>
+    <% @notifications.each do |n| %>
+      <div class="px-5 py-4 flex items-start gap-3.5 <%= 'bg-blue-50/50' unless n.read %> transition">
+        <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm mt-0.5 <%= n.read ? 'bg-gray-100' : 'bg-blue-100' %>">
+          <% if n.type.downcase.include?("shipment") %>
+            🚛
+          <% elsif n.type.downcase.include?("driver") %>
+            👤
+          <% elsif n.type.downcase.include?("truck") %>
+            🚚
+          <% else %>
+            🔔
           <% end %>
-          <span class="text-xs"><%= n.type.titleize %></span>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between gap-2">
+            <p class="text-sm font-medium <%= n.read ? 'text-gray-700' : 'text-gray-900' %>"><%= n.title %></p>
+            <div class="flex items-center gap-2 shrink-0">
+              <% unless n.read %>
+                <%= button_to notification_path(n), method: :patch, class: "text-blue-600 hover:text-blue-800 text-xs font-medium" do %>
+                  Mark Read
+                <% end %>
+              <% end %>
+              <span class="text-xs text-gray-400"><%= time_ago_in_words(n.created_at) %> ago</span>
+            </div>
+          </div>
+          <% if n.message.present? %>
+            <p class="text-sm text-gray-500 mt-0.5"><%= n.message %></p>
+          <% end %>
         </div>
       </div>
-    </div>
+    <% end %>
   <% end %>
 </div>
