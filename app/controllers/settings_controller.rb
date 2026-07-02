@@ -1,4 +1,4 @@
-class SettingsController < ApplicationController
+class SettingsController < AuthenticatedController
   def index
     @settings = policy_scope(Setting).order(:group, :key)
     @groups = @settings.pluck(:group).uniq

@@ -1,4 +1,4 @@
-class DriverAssignmentsController < ApplicationController
+class DriverAssignmentsController < AuthenticatedController
   def index
     @assignments = policy_scope(DriverAssignment).includes(:driver, :truck, :assigned_by)
                         .order(assigned_at: :desc)

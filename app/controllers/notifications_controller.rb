@@ -1,4 +1,4 @@
-class NotificationsController < ApplicationController
+class NotificationsController < AuthenticatedController
   before_action :set_notification, only: :update
 
   def index

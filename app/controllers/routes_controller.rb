@@ -1,4 +1,4 @@
-class RoutesController < ApplicationController
+class RoutesController < AuthenticatedController
   before_action :set_route, only: %i[edit update destroy]
 
   def index

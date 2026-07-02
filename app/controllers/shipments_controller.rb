@@ -1,4 +1,4 @@
-class ShipmentsController < ApplicationController
+class ShipmentsController < AuthenticatedController
   before_action :set_shipment, only: %i[show edit update destroy update_status]
 
   def index

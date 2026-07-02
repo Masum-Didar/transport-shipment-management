@@ -1,4 +1,4 @@
-class TrucksController < ApplicationController
+class TrucksController < AuthenticatedController
   before_action :set_truck, only: %i[show edit update destroy update_location]
 
   def index

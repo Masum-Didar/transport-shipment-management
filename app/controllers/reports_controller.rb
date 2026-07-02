@@ -1,4 +1,4 @@
-class ReportsController < ApplicationController
+class ReportsController < AuthenticatedController
   before_action :authorize_report
 
   def daily

@@ -1,4 +1,4 @@
-class DriversController < ApplicationController
+class DriversController < AuthenticatedController
   before_action :set_driver, only: %i[show edit update destroy]
 
   def index
