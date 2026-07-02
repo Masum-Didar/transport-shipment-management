@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  description: MyText
+  discarded_at: 2026-07-02 12:33:48
+
+two:
+  name: MyString
+  description: MyText
+  discarded_at: 2026-07-02 12:33:48
