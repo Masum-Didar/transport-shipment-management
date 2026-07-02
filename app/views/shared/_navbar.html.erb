@@ -1,0 +1,13 @@
+<header class="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between">
+  <h2 class="text-xl font-semibold text-gray-800"><%= content_for(:page_title) || controller_name.titleize %></h2>
+
+  <div class="flex items-center space-x-4">
+    <%= link_to notifications_path, class: "relative" do %>
+      <span class="text-lg">🔔</span>
+      <% unread = current_user.notifications.unread.count %>
+      <% if unread > 0 %>
+        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center"><%= unread %></span>
+      <% end %>
+    <% end %>
+  </div>
+</header>

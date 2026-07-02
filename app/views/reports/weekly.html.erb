@@ -1,0 +1,26 @@
+<% content_for :page_title, "Weekly Report" %>
+
+<div class="bg-white rounded-lg shadow p-6 mb-6">
+  <%= form_tag reports_weekly_path, method: :get, class: "flex gap-2 items-center" do %>
+    <%= date_field_tag :date, @week_start, class: "rounded border-gray-300 text-sm" %>
+    <%= submit_tag "Generate", class: "bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700" %>
+    <span class="text-sm text-gray-500 ml-2">
+      <%= link_to "PDF", reports_weekly_path(format: :pdf, date: @week_start), class: "text-blue-600 hover:text-blue-800" %> |
+      <%= link_to "CSV", reports_weekly_path(format: :csv, date: @week_start), class: "text-blue-600 hover:text-blue-800" %>
+    </span>
+  <% end %>
+</div>
+
+<div class="bg-white rounded-lg shadow p-6">
+  <h3 class="font-semibold mb-4"><%= @week_start.strftime("%d %b") %> — <%= @week_end.strftime("%d %b %Y") %></h3>
+  <table class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-50">
+      <tr><th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Date</th><th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Type</th><th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Count</th></tr>
+    </thead>
+    <tbody class="divide-y divide-gray-200">
+      <% @grouped.each do |(date, type), count| %>
+        <tr><td class="px-4 py-2"><%= date %></td><td class="px-4 py-2"><%= status_badge(type) %></td><td class="px-4 py-2"><%= count %></td></tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

@@ -7,8 +7,9 @@ class Shipment < ApplicationRecord
   belongs_to :truck, optional: true
   belongs_to :created_by, class_name: "User"
 
-  has_many :shipment_items, dependent: :destroy
+  has_many :shipment_items, dependent: :destroy, inverse_of: :shipment
   has_many :products, through: :shipment_items
+  accepts_nested_attributes_for :shipment_items, allow_destroy: true, reject_if: :all_blank
   has_many :status_logs, class_name: "ShipmentStatusLog", dependent: :destroy
   has_many :notifications, as: :notifiable, dependent: :destroy
 

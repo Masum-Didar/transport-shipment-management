@@ -1,0 +1,98 @@
+<% content_for :page_title, "Shipment #{@shipment.shipment_number}" %>
+
+<div class="flex gap-2 mb-4">
+  <%= link_to "← Back", shipments_path, class: "text-blue-600 hover:text-blue-800" %>
+  <%= link_to "✏️ Edit", edit_shipment_path(@shipment), class: "text-blue-600 hover:text-blue-800" if policy(@shipment).edit? && @shipment.status != "completed" %>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <div class="lg:col-span-2">
+    <div class="bg-white rounded-lg shadow p-6 mb-6">
+      <div class="flex justify-between items-start mb-4">
+        <div>
+          <h3 class="text-lg font-semibold"><%= @shipment.shipment_number %></h3>
+          <p class="text-sm text-gray-500">
+            <%= status_badge(@shipment.shipment_type) %>
+            <%= @shipment.source_location&.name %> → <%= @shipment.destination_location&.name %>
+          </p>
+        </div>
+        <div class="text-right">
+          <div><%= status_badge(@shipment.status) %></div>
+          <p class="text-xs text-gray-500 mt-1"><%= l(@shipment.shipment_date, format: :long) %></p>
+        </div>
+      </div>
+
+      <dl class="grid grid-cols-2 gap-4 text-sm">
+        <div><dt class="text-gray-500">Truck:</dt><dd class="font-medium"><%= @shipment.truck&.truck_number || "Not assigned" %></dd></div>
+        <div><dt class="text-gray-500">Driver:</dt><dd class="font-medium"><%= @shipment.truck&.current_driver&.name || "—" %></dd></div>
+        <div><dt class="text-gray-500">Created By:</dt><dd><%= @shipment.created_by.name %></dd></div>
+        <div><dt class="text-gray-500">Est. Delivery:</dt><dd><%= @shipment.estimated_delivery_date&.strftime("%d %b %Y") || "—" %></dd></div>
+      </dl>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6">
+      <h4 class="font-semibold text-gray-700 mb-3">📦 Products</h4>
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Product</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Quantity</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Weight</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Unit</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          <% @items.each do |item| %>
+            <tr>
+              <td class="px-4 py-2"><%= item.product.name %></td>
+              <td class="px-4 py-2"><%= number_with_delimiter(item.quantity) %></td>
+              <td class="px-4 py-2"><%= number_with_delimiter(item.weight) %></td>
+              <td class="px-4 py-2"><%= item.unit %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <% if @shipment.notes.present? %>
+        <div class="mt-4 p-3 bg-gray-50 rounded">
+          <p class="text-sm font-medium text-gray-700">Notes:</p>
+          <p class="text-sm text-gray-600"><%= @shipment.notes %></p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="lg:col-span-1">
+    <div class="bg-white rounded-lg shadow p-6 mb-6">
+      <h4 class="font-semibold text-gray-700 mb-4">📅 Timeline</h4>
+      <div class="space-y-0">
+        <% @status_logs.each_with_index do |log, idx| %>
+          <div class="flex gap-3">
+            <div class="flex flex-col items-center">
+              <div class="w-3 h-3 rounded-full <%= idx == @status_logs.size - 1 ? 'bg-blue-500' : 'bg-gray-300' %>"></div>
+              <div class="w-0.5 h-full <%= idx < @status_logs.size - 1 ? 'bg-gray-200' : '' %>"></div>
+            </div>
+            <div class="pb-4">
+              <p class="text-sm font-medium"><%= log.status.titleize %></p>
+              <p class="text-xs text-gray-500"><%= l(log.changed_at, format: :long) %></p>
+              <p class="text-xs text-gray-400">by <%= log.changed_by.name %></p>
+              <% if log.remarks.present? %>
+                <p class="text-xs text-gray-500 mt-1 italic"><%= log.remarks %></p>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <% if policy(@shipment).update_status? && @shipment.status != "completed" %>
+      <div class="bg-white rounded-lg shadow p-6">
+        <h4 class="font-semibold text-gray-700 mb-3">Update Status</h4>
+        <%= form_tag update_status_shipment_path(@shipment), method: :patch, class: "space-y-3" do %>
+          <%= select_tag :status, options_for_select(status_options_for(@shipment.status)), prompt: "Select status", required: true, class: "block w-full rounded border-gray-300 shadow-sm text-sm" %>
+          <%= text_area_tag :remarks, nil, placeholder: "Remarks (optional)", rows: 2, class: "block w-full rounded border-gray-300 shadow-sm text-sm" %>
+          <%= submit_tag "Update Status", class: "w-full bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700" %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

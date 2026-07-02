@@ -1,0 +1,29 @@
+<% content_for :page_title, "Notifications" %>
+
+<div class="flex justify-between items-center mb-4">
+  <span class="text-sm text-gray-500"><%= pluralize(@notifications.count, "notification") %></span>
+  <%= button_to "Mark All Read", mark_all_read_notifications_path, method: :post, class: "text-blue-600 text-sm hover:text-blue-800" %>
+</div>
+
+<div class="bg-white rounded-lg shadow divide-y divide-gray-200">
+  <% if @notifications.empty? %>
+    <p class="text-center text-gray-500 py-8">No notifications yet.</p>
+  <% end %>
+  <% @notifications.each do |n| %>
+    <div class="p-4 <%= 'bg-blue-50' unless n.read %>">
+      <div class="flex justify-between items-start">
+        <div>
+          <p class="text-sm font-medium"><%= n.title %></p>
+          <p class="text-xs text-gray-500 mt-1"><%= n.message %></p>
+          <p class="text-xs text-gray-400 mt-1"><%= time_ago_in_words(n.created_at) %> ago</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <% unless n.read %>
+            <%= button_to "Mark Read", notification_path(n), method: :patch, class: "text-blue-600 text-xs hover:text-blue-800" %>
+          <% end %>
+          <span class="text-xs"><%= n.type.titleize %></span>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

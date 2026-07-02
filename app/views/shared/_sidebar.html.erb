@@ -1,0 +1,32 @@
+<aside class="fixed left-0 top-0 h-full w-64 bg-gray-900 text-white flex flex-col z-40">
+  <div class="p-4 border-b border-gray-700">
+    <h1 class="text-lg font-bold">📦 TSM System</h1>
+  </div>
+
+  <nav class="flex-1 overflow-y-auto p-3 space-y-1">
+    <%= nav_link "Dashboard",    dashboard_path,        "🏠" %>
+    <%= nav_link "Trucks",       trucks_path,           "🚛" %>
+    <%= nav_link "Drivers",      drivers_path,          "👨‍✈️" %>
+    <%= nav_link "Products",     products_path,         "📦" %>
+    <%= nav_link "Shipments",    shipments_path,        "📋" %>
+    <%= nav_link "Locations",    locations_path,        "📍" %>
+    <%= nav_link "Routes",       routes_path,           "🗺️" %>
+
+    <div class="border-t border-gray-700 my-3"></div>
+
+    <%= nav_link "Reports",      reports_daily_path,    "📊" %>
+    <%= nav_link "Notifications", notifications_path,  "🔔" %>
+
+    <div class="border-t border-gray-700 my-3"></div>
+
+    <%= nav_link "Audit Log",    audit_logs_path,       "📝" if current_user.admin? %>
+    <%= nav_link "Settings",     settings_path,         "⚙️" if current_user.role.name.in?(%w[super_admin admin]) %>
+  </nav>
+
+  <div class="p-4 border-t border-gray-700">
+    <div class="text-sm text-gray-400"><%= current_user.name %></div>
+    <div class="text-xs text-gray-500"><%= current_user.role.name.titleize %></div>
+    <%= link_to "Sign Out", destroy_user_session_path, data: { turbo_method: :delete },
+                class: "text-xs text-red-400 hover:text-red-300 mt-1 block" %>
+  </div>
+</aside>

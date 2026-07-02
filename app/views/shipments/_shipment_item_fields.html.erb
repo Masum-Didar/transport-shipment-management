@@ -1,0 +1,12 @@
+<tr class="nested-fields">
+  <td class="px-4 py-2">
+    <%= f.collection_select :product_id, Product.kept, :id, :name, { prompt: "Select" }, class: "rounded border-gray-300 text-sm w-40" %>
+    <%= f.hidden_field :_destroy %>
+  </td>
+  <td class="px-4 py-2"><%= f.number_field :quantity, step: 0.01, class: "rounded border-gray-300 text-sm w-24" %></td>
+  <td class="px-4 py-2"><%= f.number_field :weight, step: 0.01, class: "rounded border-gray-300 text-sm w-24" %></td>
+  <td class="px-4 py-2"><%= f.text_field :unit, class: "rounded border-gray-300 text-sm w-20" %></td>
+  <td class="px-4 py-2">
+    <button type="button" data-action="nested-form#remove" class="text-red-600 text-sm hover:text-red-800">Remove</button>
+  </td>
+</tr>

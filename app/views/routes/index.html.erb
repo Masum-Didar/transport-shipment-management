@@ -1,0 +1,37 @@
+<% content_for :page_title, "Routes" %>
+
+<div class="flex justify-between items-center mb-4">
+  <span class="text-sm text-gray-500"><%= pluralize(@routes.count, "route") %></span>
+  <%= link_to "+ Add Route", new_route_path, class: "bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700" if policy(Route).new? %>
+</div>
+
+<div class="bg-white rounded-lg shadow overflow-hidden">
+  <table class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-50">
+      <tr>
+        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">From</th>
+        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">To</th>
+        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Distance</th>
+        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Est. Time</th>
+        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-200">
+      <% @routes.each do |route| %>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3"><%= route.from_location.name %></td>
+          <td class="px-4 py-3"><%= route.to_location.name %></td>
+          <td class="px-4 py-3 text-sm"><%= route.distance_km %> km</td>
+          <td class="px-4 py-3 text-sm"><%= route.estimated_hours %> hrs</td>
+          <td class="px-4 py-3">
+            <%= link_to "✏️", edit_route_path(route), class: "text-gray-600 hover:text-gray-800 mr-2", title: "Edit" if policy(route).edit? %>
+            <%= link_to "🗑", route, method: :delete, data: { confirm: "Are you sure?" }, class: "text-red-600 hover:text-red-800", title: "Delete" if policy(route).destroy? %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <% if @routes.empty? %>
+    <p class="text-center text-gray-500 py-8">No routes found.</p>
+  <% end %>
+</div>

@@ -1,0 +1,80 @@
+<%= render "shared/form_errors", object: shipment %>
+
+<%= form_with model: shipment, class: "space-y-6", data: { controller: "nested-form" } do |f| %>
+  <div class="bg-white rounded-lg shadow p-6">
+    <h4 class="font-semibold text-gray-700 mb-4">📋 Shipment Details</h4>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <%= f.label :shipment_type, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.select :shipment_type, [["Export", "export"], ["Import", "import"]], { prompt: "Select Type" }, required: true, class: "mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+      </div>
+      <div>
+        <%= f.label :shipment_date, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.date_field :shipment_date, value: Date.current, class: "mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+      </div>
+      <div>
+        <%= f.label :source_location_id, "Source", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.collection_select :source_location_id, Location.kept, :id, :name, { prompt: "Select" }, class: "mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+      </div>
+      <div>
+        <%= f.label :destination_location_id, "Destination", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.collection_select :destination_location_id, Location.kept, :id, :name, { prompt: "Select" }, class: "mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+      </div>
+      <div>
+        <%= f.label :route_id, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.collection_select :route_id, Route.kept, :id, :display_name, { prompt: "Select Route" }, class: "mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+      </div>
+      <div>
+        <%= f.label :estimated_delivery_date, "Est. Delivery", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.date_field :estimated_delivery_date, class: "mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+      </div>
+      <div>
+        <%= f.label :truck_id, "Assign Truck", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.collection_select :truck_id, Truck.kept.where.not(status: %w[maintenance inactive]), :id, :display_name, { prompt: "Select Truck" }, class: "mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+      </div>
+    </div>
+    <div class="mt-4">
+      <%= f.label :notes, class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_area :notes, rows: 2, class: "mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-lg shadow p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h4 class="font-semibold text-gray-700">📦 Products</h4>
+      <button type="button" data-action="nested-form#add" data-nested-form-target="add" class="text-blue-600 text-sm hover:text-blue-800 font-medium">
+        + Add Product
+      </button>
+    </div>
+
+    <div data-nested-form-target="container">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Product</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Quantity</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Weight</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Unit</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          <%= f.fields_for :shipment_items do |item_form| %>
+            <%= render "shipment_item_fields", f: item_form %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <template data-nested-form-target="template">
+      <%= f.fields_for :shipment_items, ShipmentItem.new, child_index: "NEW_RECORD" do |item_form| %>
+        <%= render "shipment_item_fields", f: item_form %>
+      <% end %>
+    </template>
+  </div>
+
+  <div class="flex gap-2">
+    <%= f.submit class: "bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700" %>
+    <%= link_to "Cancel", shipments_path, class: "bg-gray-100 text-gray-700 px-4 py-2 rounded hover:bg-gray-200" %>
+  </div>
+<% end %>

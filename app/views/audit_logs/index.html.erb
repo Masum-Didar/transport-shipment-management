@@ -1,0 +1,27 @@
+<% content_for :page_title, "Audit Log" %>
+
+<div class="bg-white rounded-lg shadow overflow-hidden">
+  <table class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-50">
+      <tr>
+        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Time</th>
+        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">User</th>
+        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
+        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Record</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-200">
+      <% @logs.each do |log| %>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2 text-sm text-gray-500"><%= l(log.created_at, format: :short) %></td>
+          <td class="px-4 py-2"><%= log.user&.name || "System" %></td>
+          <td class="px-4 py-2"><%= status_badge(log.action) %></td>
+          <td class="px-4 py-2 text-sm">#<%= log.auditable_id %> (<%= log.auditable_type.underscore.humanize %>)</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <% if @logs.empty? %>
+    <p class="text-center text-gray-500 py-8">No audit logs yet.</p>
+  <% end %>
+</div>

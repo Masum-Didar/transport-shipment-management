@@ -1,0 +1,5 @@
+<% content_for :page_title, "Edit Truck" %>
+<div class="bg-white rounded-lg shadow p-6 max-w-2xl">
+  <h3 class="text-lg font-semibold mb-4">✏️ Edit Truck: <%= @truck.truck_number %></h3>
+  <%= render "form", truck: @truck %>
+</div>

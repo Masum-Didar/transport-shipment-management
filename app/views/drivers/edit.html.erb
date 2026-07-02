@@ -1,0 +1,5 @@
+<% content_for :page_title, "Edit Driver" %>
+<div class="bg-white rounded-lg shadow p-6 max-w-2xl">
+  <h3 class="text-lg font-semibold mb-4">✏️ Edit Driver: <%= @driver.name %></h3>
+  <%= render "form", driver: @driver %>
+</div>
