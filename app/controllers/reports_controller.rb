@@ -64,12 +64,6 @@ class ReportsController < AuthenticatedController
   def respond_to_format(filename)
     respond_to do |format|
       format.html
-      format.pdf do
-        render pdf: filename, template: "reports/#{action_name}", layout: "pdf"
-      end
-      format.xlsx do
-        render xlsx: filename, template: "reports/#{action_name}", filename: "#{filename}.xlsx"
-      end
       format.csv do
         send_data generate_csv, filename: "#{filename}.csv"
       end

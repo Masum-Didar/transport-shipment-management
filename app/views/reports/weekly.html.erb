@@ -5,7 +5,6 @@
     <%= date_field_tag :date, @week_start, class: "rounded border-gray-300 text-sm" %>
     <%= submit_tag "Generate", class: "bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700" %>
     <span class="text-sm text-gray-500 ml-2">
-      <%= link_to "PDF", reports_weekly_path(format: :pdf, date: @week_start), class: "text-blue-600 hover:text-blue-800" %> |
       <%= link_to "CSV", reports_weekly_path(format: :csv, date: @week_start), class: "text-blue-600 hover:text-blue-800" %>
     </span>
   <% end %>

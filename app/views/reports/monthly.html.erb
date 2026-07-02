@@ -5,7 +5,6 @@
     <%= month_field_tag :date, @month, class: "rounded border-gray-300 text-sm" %>
     <%= submit_tag "Generate", class: "bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700" %>
     <span class="text-sm text-gray-500 ml-2">
-      <%= link_to "PDF", reports_monthly_path(format: :pdf, date: @month), class: "text-blue-600 hover:text-blue-800" %> |
       <%= link_to "CSV", reports_monthly_path(format: :csv, date: @month), class: "text-blue-600 hover:text-blue-800" %>
     </span>
   <% end %>
