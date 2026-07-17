@@ -14,11 +14,9 @@ Rails.application.routes.draw do
       resources :location_logs, only: [:index]
     end
 
-    resources :drivers do
-      resources :assignments, controller: "driver_assignments", only: [:create, :destroy]
-    end
+    resources :drivers
 
-    resources :driver_assignments, only: [:index]
+    resources :driver_assignments, only: [:index, :create, :destroy]
 
     resources :products
     resources :product_categories

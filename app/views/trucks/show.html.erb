@@ -55,32 +55,7 @@
         </div>
       <% end %>
 
-      <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
-        <h2 class="text-sm font-semibold text-gray-900 mb-4">Driver Assignment History</h2>
-        <div class="space-y-3">
-          <% if @driver_assignments.any? %>
-            <% @driver_assignments.each do |da| %>
-              <div class="flex items-center gap-3 py-2 border-b border-gray-50 last:border-0">
-                <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold <%= da.released_at.nil? ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500' %>">
-                  <%= da.released_at.nil? ? raw('<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>') : raw('<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/></svg>') %>
-                </div>
-                <div class="flex-1">
-                  <div class="text-sm font-medium text-gray-800"><%= link_to da.driver.name, da.driver, class: "text-blue-600 hover:text-blue-800" %></div>
-                  <div class="text-xs text-gray-500"><%= da.released_at.nil? ? "Currently assigned" : "Released" %></div>
-                </div>
-                <div class="text-xs text-gray-400">
-                  <%= l(da.assigned_at, format: :short) %>
-                  <% if da.released_at %>
-                    <br>→ <%= l(da.released_at, format: :short) %>
-                  <% end %>
-                </div>
-              </div>
-            <% end %>
-          <% else %>
-            <p class="text-sm text-gray-400 text-center py-4">No assignment history</p>
-          <% end %>
-        </div>
-      </div>
+
     </div>
   </div>
 </div>

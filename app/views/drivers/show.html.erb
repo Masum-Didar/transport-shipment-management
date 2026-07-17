@@ -36,39 +36,6 @@
     </div>
 
     <div class="lg:col-span-2 space-y-4">
-      <% if @current_truck.nil? && policy(DriverAssignment).create? %>
-        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
-          <h2 class="text-sm font-semibold text-gray-900 mb-3">🚛 Assign to Truck</h2>
-          <%= form_with model: DriverAssignment.new, local: true, class: "flex items-center gap-3" do |f| %>
-            <%= f.hidden_field :driver_id, value: @driver.id %>
-            <%= f.collection_select :truck_id, Truck.available, :id, :display_name, { prompt: "Select Truck" }, class: "flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" %>
-            <%= f.submit "Assign", class: "bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors" %>
-          <% end %>
-        </div>
-      <% end %>
-
-      <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
-        <h2 class="text-sm font-semibold text-gray-900 mb-4">⏱️ Assignment Timeline</h2>
-        <div class="space-y-4">
-          <% if @assignments.any? %>
-            <% @assignments.each do |a| %>
-              <div class="flex items-center gap-4">
-                <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 <%= a.released_at.nil? ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500' %>">
-                  <%= a.released_at.nil? ? raw('<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>') : raw('<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/></svg>') %>
-                </div>
-                <div class="flex-1">
-                  <span class="text-sm font-medium text-gray-800"><%= a.released_at.nil? ? "Assigned" : "Released" %></span>
-                  <span class="text-gray-400 mx-2">→</span>
-                  <span class="font-mono text-sm font-bold text-blue-700"><%= link_to a.truck.truck_number, a.truck, class: "text-blue-700 hover:text-blue-900" %></span>
-                </div>
-                <span class="text-xs text-gray-400"><%= l(a.assigned_at, format: :short) %></span>
-              </div>
-            <% end %>
-          <% else %>
-            <p class="text-sm text-gray-400 text-center py-4">No assignment history</p>
-          <% end %>
-        </div>
-      </div>
     </div>
   </div>
 </div>

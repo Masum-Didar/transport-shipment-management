@@ -1,4 +1,5 @@
 class DriverAssignment < ApplicationRecord
+  include Auditable
   belongs_to :driver
   belongs_to :truck
   belongs_to :assigned_by, class_name: "User"

@@ -1,9 +1,76 @@
-<% content_for :page_title, "Driver Assignments" %>
+<% content_for :page_title, "Truck Assignment Track" %>
 
-<div class="space-y-4">
-  <h1 class="text-xl font-semibold text-gray-900">Driver Assignments</h1>
+<div class="space-y-6">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-xl font-semibold text-gray-900">Truck Assignment Track</h1>
+      <p class="text-sm text-gray-500 mt-0.5">Assignment history and management</p>
+    </div>
+  </div>
+
+  <% if policy(DriverAssignment).create? %>
+    <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+      <h2 class="text-sm font-semibold text-gray-900 mb-4">New Assignment</h2>
+      <%= form_with model: DriverAssignment.new, local: true, class: "grid grid-cols-1 sm:grid-cols-3 gap-4 items-end" do |f| %>
+        <div>
+          <label class="block text-xs font-medium text-gray-500 mb-1">Driver</label>
+          <%= f.collection_select :driver_id, @available_drivers, :id, :display_name, { prompt: "Select Driver" }, class: "w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" %>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500 mb-1">Truck</label>
+          <%= f.collection_select :truck_id, @available_trucks, :id, :display_name, { prompt: "Select Truck" }, class: "w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" %>
+        </div>
+        <%= f.submit "Assign", class: "bg-blue-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors" %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if @active_assignments.any? %>
+    <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+      <div class="px-5 py-4 border-b border-gray-100 bg-green-50">
+        <h2 class="text-sm font-semibold text-green-800">Currently Active Assignments</h2>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="min-w-full">
+          <thead>
+            <tr class="bg-gray-50 border-b border-gray-200">
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Driver</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Truck</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Assigned By</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Since</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            <% @active_assignments.each do |a| %>
+              <tr class="hover:bg-blue-50/40 transition-colors duration-100">
+                <td class="px-4 py-3">
+                  <%= link_to a.driver.name, a.driver, class: "text-sm font-medium text-blue-600 hover:text-blue-800" %>
+                  <div class="text-xs text-gray-400"><%= a.driver.phone %></div>
+                </td>
+                <td class="px-4 py-3">
+                  <%= link_to a.truck.truck_number, a.truck, class: "font-mono text-sm font-medium text-blue-600 hover:text-blue-800" %>
+                </td>
+                <td class="px-4 py-3 text-sm text-gray-600"><%= a.assigned_by.name %></td>
+                <td class="px-4 py-3 text-sm text-gray-600"><%= l(a.assigned_at, format: :long) %></td>
+                <td class="px-4 py-3">
+                  <%= button_to driver_assignment_path(a), method: :delete, data: { confirm: "Release this driver?" }, class: "text-xs text-red-600 hover:text-red-800 font-medium flex items-center gap-1" do %>
+                    <%= raw('<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>') %>
+                    Release
+                  <% end if policy(a).destroy? %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% end %>
 
   <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+    <div class="px-5 py-4 border-b border-gray-100">
+      <h2 class="text-sm font-semibold text-gray-900">Complete Assignment History</h2>
+    </div>
     <div class="overflow-x-auto">
       <table class="min-w-full">
         <thead>
@@ -11,25 +78,35 @@
             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Driver</th>
             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Truck</th>
             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Assigned By</th>
-            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">From</th>
-            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">To</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Assigned At</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Released At</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-100">
           <% if @assignments.empty? %>
             <tr>
-              <td colspan="5">
-                <%= render EmptyStateComponent.new(icon: "👨‍✈️", title: "No assignments yet", description: "Assign a driver to a truck to get started") %>
+              <td colspan="6">
+                <%= render EmptyStateComponent.new(icon: "🚛", title: "No assignment records", description: "Assign a driver to a truck to start tracking") %>
               </td>
             </tr>
           <% else %>
             <% @assignments.each do |a| %>
               <tr class="hover:bg-blue-50/40 transition-colors duration-100">
-                <td class="px-4 py-3"><%= link_to a.driver.name, a.driver, class: "text-sm font-medium text-blue-600 hover:text-blue-800" %></td>
-                <td class="px-4 py-3"><%= link_to a.truck.truck_number, a.truck, class: "font-mono text-sm font-medium text-blue-600 hover:text-blue-800" %></td>
+                <td class="px-4 py-3">
+                  <%= link_to a.driver.name, a.driver, class: "text-sm font-medium text-blue-600 hover:text-blue-800" %>
+                  <div class="text-xs text-gray-400"><%= a.driver.phone %></div>
+                </td>
+                <td class="px-4 py-3">
+                  <%= link_to a.truck.truck_number, a.truck, class: "font-mono text-sm font-medium text-blue-600 hover:text-blue-800" %>
+                  <div class="text-xs text-gray-400"><%= a.truck.truck_type.titleize %></div>
+                </td>
                 <td class="px-4 py-3 text-sm text-gray-600"><%= a.assigned_by.name %></td>
-                <td class="px-4 py-3 text-sm text-gray-600"><%= l(a.assigned_at, format: :short) %></td>
-                <td class="px-4 py-3 text-sm text-gray-600"><%= a.released_at ? l(a.released_at, format: :short) : status_badge("active") %></td>
+                <td class="px-4 py-3 text-sm text-gray-600"><%= l(a.assigned_at, format: :long) %></td>
+                <td class="px-4 py-3 text-sm text-gray-600">
+                  <%= a.released_at ? l(a.released_at, format: :long) : raw('<span class="text-gray-400">—</span>') %>
+                </td>
+                <td class="px-4 py-3"><%= a.released_at ? status_badge("completed") : status_badge("active") %></td>
               </tr>
             <% end %>
           <% end %>

@@ -173,6 +173,10 @@ module ApplicationHelper
     raw('<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M17 7 7 17"/></svg>')
   end
 
+  def activity_icon
+    raw('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>')
+  end
+
   def check_icon
     raw('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>')
   end
@@ -193,8 +197,11 @@ module ApplicationHelper
       { path: reports_daily_path, icon: :bar_chart_icon, label: "Reports" },
       { path: notifications_path, icon: :bell_icon,      label: "Notifications" },
     ]
-    items << { path: audit_logs_path, icon: :file_text_icon, label: "Audit Log" } if current_user&.admin?
-    items << { path: settings_path, icon: :settings_icon, label: "Settings" } if current_user&.admin?
+    if current_user&.admin?
+      items << { path: driver_assignments_path, icon: :activity_icon, label: "Track View" }
+      items << { path: audit_logs_path, icon: :file_text_icon, label: "Audit Log" }
+      items << { path: settings_path, icon: :settings_icon, label: "Settings" }
+    end
     items
   end
 

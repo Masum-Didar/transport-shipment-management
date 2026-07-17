@@ -2,6 +2,9 @@ class DriverAssignmentsController < AuthenticatedController
   def index
     @assignments = policy_scope(DriverAssignment).includes(:driver, :truck, :assigned_by)
                         .order(assigned_at: :desc)
+    @active_assignments = policy_scope(DriverAssignment).current.includes(:driver, :truck, :assigned_by)
+    @available_drivers = Driver.kept.available
+    @available_trucks = Truck.kept.available
   end
 
   def create
@@ -13,9 +16,9 @@ class DriverAssignmentsController < AuthenticatedController
     if @assignment.save
       @assignment.driver.update!(status: "driving")
       @assignment.truck.update!(status: "assigned")
-      redirect_back fallback_location: drivers_path, notice: "Driver assigned successfully."
+      redirect_to driver_assignments_path, notice: "Driver assigned successfully."
     else
-      redirect_back fallback_location: drivers_path, alert: @assignment.errors.full_messages.to_sentence
+      redirect_to driver_assignments_path, alert: @assignment.errors.full_messages.to_sentence
     end
   end
 
@@ -24,8 +27,10 @@ class DriverAssignmentsController < AuthenticatedController
     authorize @assignment
 
     @assignment.update!(released_at: Time.current)
-    @assignment.driver.update!(status: "available") unless @assignment.driver.driver_assignments.where(released_at: nil).exists?
-    redirect_back fallback_location: drivers_path, notice: "Driver released successfully."
+    unless @assignment.driver.driver_assignments.where(released_at: nil).exists?
+      @assignment.driver.update!(status: "available")
+    end
+    redirect_to driver_assignments_path, notice: "Driver released successfully."
   end
 
   private

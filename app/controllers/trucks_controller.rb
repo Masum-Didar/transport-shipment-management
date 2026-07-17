@@ -10,7 +10,6 @@ class TrucksController < AuthenticatedController
   end
 
   def show
-    @driver_assignments = @truck.driver_assignments.includes(:driver, :assigned_by).order(assigned_at: :desc).limit(10)
     @current_shipment = @truck.current_shipment
   end
 
