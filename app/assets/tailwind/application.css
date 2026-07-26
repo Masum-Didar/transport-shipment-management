@@ -176,6 +176,11 @@
     height: 3px;
   }
 
+  img, svg, video, canvas, iframe {
+    max-width: 100%;
+    height: auto;
+  }
+
   @media (max-width: 640px) {
     html { font-size: 13px; }
     button, a, select, input[type="submit"] { min-height: 40px; }

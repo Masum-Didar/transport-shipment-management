@@ -1,4 +1,4 @@
-<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
   <%= render StatCardComponent.new(label: "Exports", value: @exports, icon: "📤", color: "text-blue-600") %>
   <%= render StatCardComponent.new(label: "Imports", value: @imports, icon: "📥", color: "text-purple-600") %>
   <%= render StatCardComponent.new(label: "Completed", value: @completed, icon: "✅", color: "text-green-600") %>

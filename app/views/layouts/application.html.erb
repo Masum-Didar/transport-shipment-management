@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<%= I18n.locale %>">
+<html lang="<%= I18n.locale %>" class="overflow-x-hidden">
   <head>
     <title><%= content_for(:title) || "TSM System" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -16,7 +16,7 @@
     <%= tag.meta name: "turbo-refresh-method", content: "morph" %>
   </head>
 
-  <body class="bg-gray-50 font-sans min-h-screen" data-controller="sidebar" data-sidebar-collapsed-value="false">
+  <body class="bg-gray-50 font-sans min-h-screen overflow-x-hidden" data-controller="sidebar" data-sidebar-collapsed-value="false">
     <% if user_signed_in? %>
       <%= render "shared/sidebar" %>
 

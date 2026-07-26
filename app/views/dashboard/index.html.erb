@@ -12,7 +12,7 @@
     <% end if policy(Shipment).new? %>
   </div>
 
-  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
     <div class="animate-slide-up stagger-1"><%= render StatCardComponent.new(label: "Active Shipments", value: @active_shipments, icon: "📤", color: "text-blue-600", trend: "Today so far", trend_up: true) %></div>
     <div class="animate-slide-up stagger-2"><%= render StatCardComponent.new(label: "Completed Today", value: @completed_today, icon: "✅", color: "text-green-600", trend: "#{@completed_percentage}% rate", trend_up: @completed_percentage > 50) %></div>
     <div class="animate-slide-up stagger-3"><%= render StatCardComponent.new(label: "Total Trucks", value: @total_trucks, icon: "🚛", color: "text-purple-600", trend: "#{@active_trucks} on route") %></div>

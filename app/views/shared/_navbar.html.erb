@@ -1,45 +1,48 @@
 <header class="sticky top-0 bg-slate-800 border-b border-slate-700 z-20 h-14">
   <div class="flex items-center justify-between h-full px-4 lg:px-6">
-    <div class="flex items-center gap-3 min-w-0">
+    <div class="flex items-center gap-1 min-w-0">
       <button
         data-action="click->sidebar#toggleMobile"
-        class="lg:hidden p-1.5 rounded-md text-slate-400 hover:bg-slate-700 transition-colors"
+        class="lg:hidden flex items-center justify-center w-8 h-8 rounded-md text-slate-400 hover:bg-slate-700 transition-colors"
       >
         <%= menu_icon %>
       </button>
 
       <button
         data-action="click->sidebar#toggleDesktop"
-        class="hidden lg:flex p-1.5 rounded-md text-slate-400 hover:bg-slate-700 transition-colors"
+        class="hidden lg:flex items-center justify-center w-8 h-8 rounded-md text-slate-400 hover:bg-slate-700 transition-colors"
       >
         <%= menu_icon %>
       </button>
 
-      <nav class="flex items-center gap-1 text-sm min-w-0 overflow-x-auto">
-        <%= link_to root_path, class: "text-slate-400 hover:text-white transition-colors shrink-0" do %>
+      <nav class="flex items-center text-sm min-w-0 overflow-x-auto">
+        <%= link_to root_path, class: "flex items-center justify-center w-8 h-8 text-slate-400 hover:text-white rounded-md transition-colors shrink-0" do %>
           <%= home_icon %>
         <% end %>
-        <% breadcrumb = content_for(:breadcrumb) %>
-        <% if breadcrumb.present? %>
-          <span class="flex items-center gap-1 shrink-0">
+
+        <% if content_for(:breadcrumb).present? %>
+          <span class="flex items-center justify-center w-5 h-8 shrink-0">
             <%= chevron_right_icon %>
-            <span class="text-slate-400 whitespace-nowrap"><%= breadcrumb %></span>
           </span>
+          <span class="flex items-center h-8 text-slate-400 whitespace-nowrap shrink-0"><%= content_for(:breadcrumb) %></span>
         <% end %>
-        <span class="flex items-center gap-1 shrink-0">
+
+        <span class="flex items-center justify-center w-5 h-8 shrink-0">
           <%= chevron_right_icon %>
-          <span class="text-white font-medium whitespace-nowrap"><%= content_for(:page_title) || controller_name.titleize %></span>
         </span>
+        <span class="flex items-center h-8 text-white font-medium whitespace-nowrap"><%= content_for(:page_title) || controller_name.titleize %></span>
       </nav>
     </div>
 
-    <div class="flex items-center gap-2 shrink-0">
-      <%= link_to url_for(locale: I18n.locale == :en ? :bn : :en), class: "flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium text-slate-400 hover:bg-slate-700 hover:text-white transition-colors border border-slate-600" do %>
+    <div class="flex items-center gap-1 shrink-0">
+      <%= link_to url_for(locale: I18n.locale == :en ? :bn : :en),
+                  class: "flex items-center gap-1.5 px-2.5 py-[7px] rounded-md text-xs font-medium text-slate-400 hover:bg-slate-700 hover:text-white transition-colors border border-slate-600" do %>
         <%= globe_icon %>
         <%= I18n.locale == :en ? "বাংলা" : "English" %>
       <% end %>
 
-      <%= link_to notifications_path, class: "relative p-2 rounded-md text-slate-400 hover:bg-slate-700 hover:text-white transition-colors" do %>
+      <%= link_to notifications_path,
+                  class: "relative flex items-center justify-center w-8 h-8 rounded-md text-slate-400 hover:bg-slate-700 hover:text-white transition-colors" do %>
         <%= bell_icon %>
         <% unread = current_user.notifications.unread.count %>
         <% if unread > 0 %>
@@ -50,12 +53,15 @@
       <% end %>
 
       <div class="relative" data-controller="dropdown">
-        <button data-action="click->dropdown#toggle click@window->dropdown#hide" class="flex items-center gap-2 pl-2 pr-1.5 py-1.5 rounded-md hover:bg-slate-700 transition-colors">
+        <button data-action="click->dropdown#toggle click@window->dropdown#hide"
+                class="flex items-center gap-1.5 pl-2 pr-1.5 h-8 rounded-md hover:bg-slate-700 transition-colors">
           <div class="w-7 h-7 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-semibold">
             <%= current_user.name.split.map { |n| n[0] }.join[0..1].upcase %>
           </div>
           <span class="hidden sm:block text-sm font-medium text-white"><%= current_user.name %></span>
-          <%= chevron_down_icon %>
+          <div class="flex items-center justify-center w-4 h-4 text-slate-400">
+            <%= chevron_down_icon %>
+          </div>
         </button>
 
         <div data-dropdown-target="menu" class="hidden absolute right-0 top-full mt-1 w-44 bg-white border border-gray-200 rounded-xl shadow-lg py-1 z-50">

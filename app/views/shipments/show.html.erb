@@ -125,26 +125,28 @@
         <div class="px-5 py-4 border-b border-gray-100">
           <h2 class="text-sm font-semibold text-gray-900">Products</h2>
         </div>
-        <table class="min-w-full">
-          <thead>
-            <tr class="bg-gray-50">
-              <th class="px-4 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Product</th>
-              <th class="px-4 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Qty</th>
-              <th class="px-4 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Weight</th>
-              <th class="px-4 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Unit</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-gray-50">
-            <% @items.each do |item| %>
-              <tr class="hover:bg-gray-50/50">
-                <td class="px-4 py-3 text-sm text-gray-800"><%= item.product.name %></td>
-                <td class="px-4 py-3 text-sm text-gray-600"><%= number_with_delimiter(item.quantity) %></td>
-                <td class="px-4 py-3 text-sm text-gray-600"><%= number_with_delimiter(item.weight) %> kg</td>
-                <td class="px-4 py-3 text-sm text-gray-600"><%= item.unit %></td>
+        <div class="overflow-x-auto">
+          <table class="min-w-full">
+            <thead>
+              <tr class="bg-gray-50">
+                <th class="px-4 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Product</th>
+                <th class="px-4 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Qty</th>
+                <th class="px-4 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Weight</th>
+                <th class="px-4 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Unit</th>
               </tr>
-            <% end %>
-          </tbody>
-        </table>
+            </thead>
+            <tbody class="divide-y divide-gray-50">
+              <% @items.each do |item| %>
+                <tr class="hover:bg-gray-50/50">
+                  <td class="px-4 py-3 text-sm text-gray-800"><%= item.product.name %></td>
+                  <td class="px-4 py-3 text-sm text-gray-600"><%= number_with_delimiter(item.quantity) %></td>
+                  <td class="px-4 py-3 text-sm text-gray-600"><%= number_with_delimiter(item.weight) %> kg</td>
+                  <td class="px-4 py-3 text-sm text-gray-600"><%= item.unit %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">

@@ -13,7 +13,7 @@
           <%= select_tag :report_type,
                 options_for_select(report_type_options, @report_type),
                 data: { action: "report-type#change" },
-                class: "w-56 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition cursor-pointer" %>
+                class: "w-full sm:w-56 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition cursor-pointer" %>
         </div>
 
         <% if %w[daily weekly monthly truck_wise driver_wise product_wise].include?(@report_type) %>
