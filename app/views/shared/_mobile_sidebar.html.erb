@@ -18,7 +18,7 @@
 
     <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
       <% nav_items_for_mobile.each do |item| %>
-        <%= link_to item[:path], class: "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all #{current_page?(item[:path]) ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-700'}" do %>
+        <%= link_to item[:path], class: "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all #{current_page?(item[:path]) ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-700 hover:text-white'}" do %>
           <%= send(item[:icon]) %>
           <span><%= item[:label] %></span>
         <% end %>
