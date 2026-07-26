@@ -1,0 +1,45 @@
+<% content_for :page_title, "#{@report_type.titleize} Report" %>
+
+<div data-controller="report-type">
+  <%= form_tag reports_path, method: :get, data: { report_type_target: "form" }, class: "space-y-6" do %>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2">
+            <%= bar_chart_icon %>
+            <span class="text-sm font-semibold text-gray-700">Report Type</span>
+          </div>
+          <%= select_tag :report_type,
+                options_for_select(report_type_options, @report_type),
+                data: { action: "report-type#change" },
+                class: "w-56 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition cursor-pointer" %>
+        </div>
+
+        <% if %w[daily weekly monthly truck_wise driver_wise product_wise].include?(@report_type) %>
+          <div class="flex items-center gap-2">
+            <details data-controller="export-dropdown" class="relative">
+              <summary class="list-none text-sm text-gray-600 hover:text-blue-600 flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-300 cursor-pointer">
+                <%= download_icon %> Export
+              </summary>
+              <div class="absolute right-0 z-20 mt-2 w-36 rounded-lg border border-gray-200 bg-white shadow-lg py-1">
+                <% export_params = request.query_parameters.except(:commit, :utf8) %>
+                <%= link_to "CSV",  reports_path(export_params.merge(format: :csv)),  data: { turbo: false }, class: "block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50" %>
+                <%= link_to "PDF",  reports_path(export_params.merge(format: :pdf)),  data: { turbo: false }, class: "block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50" %>
+                <%= link_to "DOCX", reports_path(export_params.merge(format: :docx)), data: { turbo: false }, class: "block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50" %>
+              </div>
+            </details>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+      <%= render partial: "#{@report_type}_filters" %>
+    </div>
+  <% end %>
+
+  <div class="mt-6">
+    <%= render partial: "#{@report_type}_results" %>
+  </div>
+</div>

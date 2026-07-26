@@ -1,0 +1,17 @@
+<div data-filter-group="driver_wise" class="flex flex-wrap gap-3 items-end">
+  <div>
+    <%= label_tag :driver_id, "Driver", class: "block text-xs font-medium text-gray-600 mb-1" %>
+    <%= select_tag :driver_id, options_from_collection_for_select(@drivers, :id, :name, params[:driver_id]), { prompt: "All Drivers", class: "rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition w-44" } %>
+  </div>
+  <div>
+    <%= label_tag :from_date, "From", class: "block text-xs font-medium text-gray-600 mb-1" %>
+    <%= date_field_tag :from_date, params[:from_date], class: "rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" %>
+  </div>
+  <div>
+    <%= label_tag :to_date, "To", class: "block text-xs font-medium text-gray-600 mb-1" %>
+    <%= date_field_tag :to_date, params[:to_date], class: "rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" %>
+  </div>
+  <div>
+    <%= submit_tag "Generate", class: "bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition cursor-pointer" %>
+  </div>
+</div>

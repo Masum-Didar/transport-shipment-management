@@ -1,0 +1,17 @@
+<div data-filter-group="custom">
+  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-8 gap-3 items-end">
+    <div>
+      <%= label_tag :start_date, "Start Date", class: "block text-xs font-medium text-gray-600 mb-1" %>
+      <%= date_field_tag :start_date, @start_date, class: "w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" %>
+    </div>
+    <div>
+      <%= label_tag :end_date, "End Date", class: "block text-xs font-medium text-gray-600 mb-1" %>
+      <%= date_field_tag :end_date, @end_date, class: "w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" %>
+    </div>
+    <%= render partial: "common_filters" %>
+    <div>
+      <label class="block text-xs font-medium text-gray-600 mb-1 invisible">Submit</label>
+      <%= submit_tag "Generate", class: "bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition cursor-pointer" %>
+    </div>
+  </div>
+</div>

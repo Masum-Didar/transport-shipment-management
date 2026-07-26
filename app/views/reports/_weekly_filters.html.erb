@@ -1,0 +1,12 @@
+<div data-filter-group="weekly">
+  <div class="space-y-3">
+    <p class="text-xs text-gray-500">Showing data for the last 7 days (<%= (Date.current - 6).strftime("%d %b") %> — <%= Date.current.strftime("%d %b %Y") %>)</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-6 gap-3 items-end">
+      <%= render partial: "common_filters" %>
+      <div>
+        <label class="block text-xs font-medium text-gray-600 mb-1 invisible">Submit</label>
+        <%= submit_tag "Generate", class: "bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition cursor-pointer" %>
+      </div>
+    </div>
+  </div>
+</div>

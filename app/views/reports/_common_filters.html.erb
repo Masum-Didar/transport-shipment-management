@@ -1,0 +1,20 @@
+<div>
+  <%= label_tag :type, "Type", class: "block text-xs font-medium text-gray-600 mb-1" %>
+  <%= select_tag :type, options_for_select([["All Types", ""], ["Export", "export"], ["Import", "import"]], params[:type]), class: "w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" %>
+</div>
+<div>
+  <%= label_tag :source_id, "Source", class: "block text-xs font-medium text-gray-600 mb-1" %>
+  <%= select_tag :source_id, options_from_collection_for_select(@locations, :id, :name, params[:source_id]), prompt: "All Sources", class: "w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" %>
+</div>
+<div>
+  <%= label_tag :destination_id, "Destination", class: "block text-xs font-medium text-gray-600 mb-1" %>
+  <%= select_tag :destination_id, options_from_collection_for_select(@locations, :id, :name, params[:destination_id]), prompt: "All Destinations", class: "w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" %>
+</div>
+<div>
+  <%= label_tag :truck_id, "Truck", class: "block text-xs font-medium text-gray-600 mb-1" %>
+  <%= select_tag :truck_id, options_from_collection_for_select(@trucks, :id, :display_name, params[:truck_id]), prompt: "All Trucks", class: "w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" %>
+</div>
+<div>
+  <%= label_tag :status, "Status", class: "block text-xs font-medium text-gray-600 mb-1" %>
+  <%= select_tag :status, options_for_select(shipment_status_options, params[:status]), class: "w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" %>
+</div>

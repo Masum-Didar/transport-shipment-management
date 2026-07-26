@@ -1,24 +1,12 @@
-<% content_for :page_title, "Driver Wise Report" %>
-
-<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 mb-6">
-  <%= form_tag reports_driver_wise_path, method: :get, class: "flex flex-wrap gap-3 items-center" do %>
-    <div class="relative">
-      <%= select_tag :driver_id, options_from_collection_for_select(Driver.kept, :id, :name, params[:driver_id]), { prompt: "Select Driver", class: "rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition w-44" } %>
-    </div>
-    <div class="relative">
-      <%= date_field_tag :from_date, params[:from_date], class: "rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" %>
-    </div>
-    <div class="relative">
-      <%= date_field_tag :to_date, params[:to_date], class: "rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition" %>
-    </div>
-    <%= submit_tag "Generate", class: "bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition cursor-pointer" %>
-  <% end %>
-</div>
-
 <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
   <div class="px-5 py-4 border-b border-gray-100">
     <h3 class="text-sm font-semibold text-gray-700">
-      <%= params[:driver_id].present? ? Driver.find(params[:driver_id]).name : "All Drivers" %>
+      <%= @driver&.name || "All Drivers" %>
+      <% if @start_date || @end_date %>
+        <span class="text-xs text-gray-400 font-normal">
+          — <%= @start_date&.strftime("%d %b %Y") || "..." %> to <%= @end_date&.strftime("%d %b %Y") || "..." %>
+        </span>
+      <% end %>
     </h3>
   </div>
   <div class="overflow-x-auto">
@@ -34,8 +22,8 @@
       <tbody class="divide-y divide-gray-200">
         <% @assignments.each do |a| %>
           <tr class="hover:bg-gray-50 transition">
-            <td class="px-5 py-3 text-sm text-gray-700"><%= a.driver.name %></td>
-            <td class="px-5 py-3 text-sm text-gray-600"><%= a.truck.truck_number %></td>
+            <td class="px-5 py-3 text-sm text-gray-700"><%= a.driver&.name %></td>
+            <td class="px-5 py-3 text-sm text-gray-600"><%= a.truck&.truck_number %></td>
             <td class="px-5 py-3 text-sm text-gray-600"><%= l(a.assigned_at, format: :short) %></td>
             <td class="px-5 py-3 text-sm">
               <% if a.released_at %>

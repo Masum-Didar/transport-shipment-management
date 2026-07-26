@@ -39,14 +39,7 @@ Rails.application.routes.draw do
 
     resources :settings, only: [:index, :update]
 
-    namespace :reports do
-      get :daily
-      get :weekly
-      get :monthly
-      get :truck_wise
-      get :driver_wise
-      get :product_wise
-    end
+    get "reports", to: "reports#index", as: :reports
 
     resources :audit_logs, only: [:index]
   end

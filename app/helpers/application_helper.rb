@@ -194,7 +194,7 @@ module ApplicationHelper
       { path: products_path,     icon: :package_icon,    label: "Products" },
       { path: locations_path,    icon: :map_pin_icon,    label: "Locations" },
       { path: routes_path,       icon: :map_icon,        label: "Routes" },
-      { path: reports_daily_path, icon: :bar_chart_icon, label: "Reports" },
+      { path: reports_path, icon: :bar_chart_icon, label: "Reports" },
       { path: notifications_path, icon: :bell_icon,      label: "Notifications" },
     ]
     if current_user&.admin?
