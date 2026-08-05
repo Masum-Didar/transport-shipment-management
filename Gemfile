@@ -51,7 +51,7 @@ gem "discard"
 
 # Search & Pagination
 gem "ransack"
-gem "pagy", "~> 9.0"
+gem "pagy", "~> 43.4"
 
 # Reusable UI Components
 gem "view_component"
