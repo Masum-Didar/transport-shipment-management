@@ -21,31 +21,31 @@ puts "=> Roles created: #{Role.pluck(:name).join(', ')}"
 super_admin_role = Role.find_by!(name: "super_admin")
 admin_role = Role.find_by!(name: "admin")
 
-User.find_or_create_by!(email: "admin@tsm.com") do |u|
-  u.password = "password123"
+User.find_or_create_by!(email: "masumdidar.cse@gmail.com") do |u|
+  u.password = "password@123"
   u.name = "Super Admin"
   u.role = super_admin_role
   u.status = "active"
 end
 
-User.find_or_create_by!(email: "dispatcher@tsm.com") do |u|
-  u.password = "password123"
-  u.name = "Main Dispatcher"
-  u.role = admin_role
-  u.status = "active"
-end
+# User.find_or_create_by!(email: "dispatcher@tsm.com") do |u|
+#   u.password = "password123"
+#   u.name = "Main Dispatcher"
+#   u.role = admin_role
+#   u.status = "active"
+# end
 
-user_role = Role.find_by!(name: "user")
+# user_role = Role.find_by!(name: "user")
+#
+# User.find_or_create_by!(email: "user@tsm.com") do |u|
+#   u.password = "password123"
+#   u.name = "Regular User"
+#   u.role = user_role
+#   u.status = "active"
+# end
 
-User.find_or_create_by!(email: "user@tsm.com") do |u|
-  u.password = "password123"
-  u.name = "Regular User"
-  u.role = user_role
-  u.status = "active"
-end
-
-puts "=> Users created: #{User.pluck(:email).join(', ')}"
-puts "   Login: admin@tsm.com / password123"
+# puts "=> Users created: #{User.pluck(:email).join(', ')}"
+# puts "   Login: admin@tsm.com / password123"
 
 # Locations
 locations = [
