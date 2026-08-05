@@ -87,6 +87,10 @@ bn:
     updated: "%{model} সফলভাবে আপডেট করা হয়েছে।"
     destroyed: "%{model} সফলভাবে মুছে ফেলা হয়েছে।"
     not_authorized: "এই কাজটি করার অনুমতি আপনার নেই।"
+    user_activated: "%{name} সক্রিয় করা হয়েছে।"
+    user_deactivated: "%{name} নিষ্ক্রিয় করা হয়েছে।"
+    user_activation_failed: "এই অ্যাকাউন্টটি সক্রিয় করা যায়নি।"
+    user_deactivation_failed: "এই অ্যাকাউন্টটি নিষ্ক্রিয় করা যায়নি।"
 
   confirm:
     delete: "আপনি কি নিশ্চিত? এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।"
@@ -116,6 +120,13 @@ bn:
     profile: "প্রোফাইল"
     forgot_password: "পাসওয়ার্ড ভুলে গেছেন?"
     remember_me: "আমাকে মনে রাখুন"
+    role: "ভূমিকা"
+    select_role: "ভূমিকা নির্বাচন করুন"
+
+  activerecord:
+    errors:
+      messages:
+        not_allowed: "সাইন আপের জন্য অনুমোদিত নয়। অনুগ্রহ করে ব্যবহারকারী বা অ্যাডমিন নির্বাচন করুন।"
 
   locale:
     en: "English"

@@ -14,7 +14,7 @@ class User < ApplicationRecord
   has_many :audit_logs, dependent: :nullify
 
   validates :name, presence: true
-  validates :status, inclusion: { in: %w[active inactive] }
+  validates :status, inclusion: { in: %w[onboarding active inactive] }
 
   def admin?
     role.name.in?(%w[super_admin admin])
@@ -22,6 +22,10 @@ class User < ApplicationRecord
 
   def super_admin?
     role.name == "super_admin"
+  end
+
+  def onboarding?
+    status == "onboarding"
   end
 
   def display_name

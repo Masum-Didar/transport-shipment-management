@@ -1,7 +1,8 @@
 # Roles
 roles = {
-  "super_admin" => "Full system access. Can manage users, settings, and all data.",
+  "super_admin" => "Full system access. Can manage users, settings, and all data. Created manually, never via signup.",
   "admin"       => "Can manage all operations, reports, and settings. Cannot manage users.",
+  "user"        => "Standard user account created via signup.",
   "dispatcher"  => "Day-to-day operations: create/update shipments, assign trucks and drivers.",
   "operator"    => "Data entry: create shipments, update statuses.",
   "account"     => "View reports and shipment history for billing and accounting.",
@@ -31,6 +32,15 @@ User.find_or_create_by!(email: "dispatcher@tsm.com") do |u|
   u.password = "password123"
   u.name = "Main Dispatcher"
   u.role = admin_role
+  u.status = "active"
+end
+
+user_role = Role.find_by!(name: "user")
+
+User.find_or_create_by!(email: "user@tsm.com") do |u|
+  u.password = "password123"
+  u.name = "Regular User"
+  u.role = user_role
   u.status = "active"
 end
 

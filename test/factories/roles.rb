@@ -13,6 +13,10 @@ FactoryBot.define do
       name { "admin" }
     end
 
+    trait :user do
+      name { "user" }
+    end
+
     trait :dispatcher do
       name { "dispatcher" }
     end

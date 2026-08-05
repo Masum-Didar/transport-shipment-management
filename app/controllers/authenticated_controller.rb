@@ -3,6 +3,7 @@ class AuthenticatedController < ApplicationController
 
   before_action :authenticate_user!
   before_action :set_current_attributes
+  before_action :ensure_account_active
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index
 
@@ -14,6 +15,13 @@ class AuthenticatedController < ApplicationController
     Current.user = current_user
     Current.ip_address = request.remote_ip
     Current.user_agent = request.user_agent
+  end
+
+  def ensure_account_active
+    return unless current_user.onboarding?
+    return if params[:controller] == "pending_approval"
+
+    redirect_to pending_approval_path
   end
 
   def user_not_authorized

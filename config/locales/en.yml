@@ -87,6 +87,10 @@ en:
     updated: "%{model} was successfully updated."
     destroyed: "%{model} was successfully destroyed."
     not_authorized: "You are not authorized to perform this action."
+    user_activated: "%{name} has been activated."
+    user_deactivated: "%{name} has been deactivated."
+    user_activation_failed: "Could not activate this account."
+    user_deactivation_failed: "Could not deactivate this account."
 
   confirm:
     delete: "Are you sure? This action cannot be undone."
@@ -116,6 +120,13 @@ en:
     profile: "Profile"
     forgot_password: "Forgot password?"
     remember_me: "Remember me"
+    role: "Role"
+    select_role: "Select role"
+
+  activerecord:
+    errors:
+      messages:
+        not_allowed: "is not available for signup. Please choose User or Admin."
 
   locale:
     en: "English"

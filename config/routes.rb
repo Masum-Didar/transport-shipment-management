@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   scope "(:locale)", locale: /en|bn/ do
-  devise_for :users
+  devise_for :users, controllers: { registrations: "users/registrations" }
 
   get "up" => "rails/health#show", as: :rails_health_check
 
@@ -38,6 +38,15 @@ Rails.application.routes.draw do
     end
 
     resources :settings, only: [:index, :update]
+
+    resources :users, only: [:index] do
+      member do
+        patch :activate
+        patch :deactivate
+      end
+    end
+
+    get "pending_approval", to: "pending_approval#show", as: :pending_approval
 
     get "reports", to: "reports#index", as: :reports
 

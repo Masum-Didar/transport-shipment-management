@@ -40,6 +40,7 @@ module ApplicationHelper
       "maintenance" => ["bg-red-100",    "text-red-800",    "bg-red-400"],
       "inactive"    => ["bg-gray-100",   "text-gray-800",   "bg-gray-400"],
       "active"      => ["bg-green-100",  "text-green-800",  "bg-green-400"],
+      "onboarding"  => ["bg-amber-100",  "text-amber-800",  "bg-amber-400"],
       "driving"     => ["bg-blue-100",   "text-blue-800",   "bg-blue-400"],
       "leave"       => ["bg-yellow-100", "text-yellow-800", "bg-yellow-400"],
       "off_duty"    => ["bg-gray-100",   "text-gray-600",   "bg-gray-400"],
@@ -198,6 +199,7 @@ module ApplicationHelper
       { path: notifications_path, icon: :bell_icon,      label: "Notifications" },
     ]
     if current_user&.admin?
+      items << { path: users_path, icon: :user_icon, label: "Users" }
       items << { path: driver_assignments_path, icon: :activity_icon, label: "Track View" }
       items << { path: audit_logs_path, icon: :file_text_icon, label: "Audit Log" }
       items << { path: settings_path, icon: :settings_icon, label: "Settings" }

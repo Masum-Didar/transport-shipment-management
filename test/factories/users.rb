@@ -17,6 +17,10 @@ FactoryBot.define do
       association :role, :admin
     end
 
+    trait :user_role do
+      association :role, :user
+    end
+
     trait :dispatcher do
       association :role, :dispatcher
     end
